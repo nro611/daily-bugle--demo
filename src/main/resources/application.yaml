@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/daily_bugle?serverTimezone=UTC&characterEncoding=utf8
+    username: root
+    password: test1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8080
