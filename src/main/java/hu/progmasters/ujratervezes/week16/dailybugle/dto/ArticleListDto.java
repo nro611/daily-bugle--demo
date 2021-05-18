@@ -12,4 +12,6 @@ public class ArticleListDto {
     private String publicistName;
     private String title;
     private String synopsys;
+    private double avgRating;
+    private int numOfRatings;
 }

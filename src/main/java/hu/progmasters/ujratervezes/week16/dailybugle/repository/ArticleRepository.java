@@ -29,6 +29,8 @@ public class ArticleRepository {
             article.setPublicistName(resultSet.getString("name"));
             article.setTitle(resultSet.getString("title"));
             article.setSynopsys(resultSet.getString("synopsys"));
+            article.setAvgRating(resultSet.getDouble("avg_rating"));
+            article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
             return article;
         });
     }
@@ -44,6 +46,15 @@ public class ArticleRepository {
             article.setText(resultSet.getString("text"));
             return article;
         }, id);
+    }
+
+    public boolean saveRating(int rating, int id) {
+        try {
+            int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_RATING.getSqlQuery(), id, rating);
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
     }
 
     public boolean updateArticle(ArticleModifyDto data, int id, LocalDateTime now) {
@@ -72,7 +83,7 @@ public class ArticleRepository {
 
     public boolean saveArticle(Integer publicist_id, String title, String synopsys, String text, LocalDateTime now) {
         try {
-            int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE.getSqlQuery(),
+            int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_ARTICLE.getSqlQuery(),
                     publicist_id,
                     title,
                     synopsys,
@@ -84,4 +95,6 @@ public class ArticleRepository {
             return false;
         }
     }
+
+
 }

@@ -4,6 +4,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPath;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRating;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,10 +43,6 @@ public class ArticleService {
         return articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
     }
 
-    public boolean deleteArticle(int id) {
-        return articleRepository.deleteArticle(id, LocalDateTime.now(clock));
-    }
-
     public boolean saveArticle(ArticleImportPath articleImportPath) {
         boolean saveSuccessful = false;
         List<String> lines = new ArrayList<>();
@@ -65,5 +62,19 @@ public class ArticleService {
         saveSuccessful = articleRepository.saveArticle(publicist_id, title, synopsys, text, LocalDateTime.now(clock));
 
         return saveSuccessful;
+    }
+
+    public boolean saveRating(ArticleRating data, int id) {
+        int rating = data.getRating();
+        if (rating >= 1 && rating <= 5) {
+            return articleRepository.saveRating(rating, id);
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean deleteArticle(int id) {
+        return articleRepository.deleteArticle(id, LocalDateTime.now(clock));
     }
 }

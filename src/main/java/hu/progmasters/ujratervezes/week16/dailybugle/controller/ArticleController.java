@@ -4,6 +4,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPath;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRating;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,16 @@ public class ArticleController {
         }
     }
 
+    @PostMapping("/rating/{id}")
+    public ResponseEntity<Void> saveRating(@RequestBody ArticleRating data, @PathVariable int id) {
+        boolean rateSuccessful = articleService.saveRating(data, id);
+        if (rateSuccessful) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateArticle(@RequestBody ArticleModifyDto data, @PathVariable int id) {
         boolean updateSuccessful = articleService.updateArticle(data, id);
@@ -85,4 +96,6 @@ public class ArticleController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+
 }
