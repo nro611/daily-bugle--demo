@@ -48,8 +48,8 @@ public class PublicistController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updatePublicist(@PathVariable int id, @RequestBody PublicistCreateUpdateData data) {
-        boolean updateSuccesful = publicistService.updatePublicist(id, data);
-        if (updateSuccesful) {
+        boolean updateSuccessful = publicistService.updatePublicist(id, data);
+        if (updateSuccessful) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -58,8 +58,8 @@ public class PublicistController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePublicist(@PathVariable int id) {
-        boolean deleteSuccesful = publicistService.deletePublicist(id);
-        if (deleteSuccesful) {
+        boolean deleteSuccessful = publicistService.deletePublicist(id);
+        if (deleteSuccessful) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
