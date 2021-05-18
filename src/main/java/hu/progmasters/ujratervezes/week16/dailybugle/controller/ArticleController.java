@@ -31,14 +31,13 @@ public class ArticleController {
 
     @GetMapping("/fresh")
     public ResponseEntity<List<ArticleListDto>> getFreshArticles() {
-        // TODO: legfrissebb 10 cikk
         return new ResponseEntity<>(articleService.getFreshArticles(), HttpStatus.OK);
     }
 
     @GetMapping("/top")
     public ResponseEntity<List<ArticleListDto>> getTopArticles() {
         // TODO: Legjobban értékelt 10 cikk
-        return null;
+        return new ResponseEntity<>(articleService.getTopArticles(), HttpStatus.OK);
     }
 
     @GetMapping("/top_fresh")

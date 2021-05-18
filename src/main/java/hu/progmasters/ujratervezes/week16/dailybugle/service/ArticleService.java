@@ -39,6 +39,10 @@ public class ArticleService {
         return articleRepository.getFreshArticles();
     }
 
+    public List<ArticleListDto> getTopArticles() {
+        return articleRepository.getTopArticles();
+    }
+
     public Article getArticle(int id) {
         return articleRepository.getArticle(id);
     }

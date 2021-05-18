@@ -1,5 +1,6 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
+import hu.progmasters.ujratervezes.week16.dailybugle.configuration.ArticleListMapper;
 import hu.progmasters.ujratervezes.week16.dailybugle.configuration.ArticleQuery;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
@@ -10,45 +11,31 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ArticleRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final ArticleListMapper mapper;
+
 
     @Autowired
-    public ArticleRepository(JdbcTemplate jdbcTemplate) {
+    public ArticleRepository(JdbcTemplate jdbcTemplate, ArticleListMapper mapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.mapper = mapper;
     }
 
     public List<ArticleListDto> getArticles() {
-        return jdbcTemplate.query(ArticleQuery.GET_ALL.getSqlQuery(), (resultSet, i) -> {
-            ArticleListDto article = new ArticleListDto();
-            article.setId(resultSet.getInt("id"));
-            article.setPublicistName(resultSet.getString("name"));
-            article.setTitle(resultSet.getString("title"));
-            article.setSynopsys(resultSet.getString("synopsys"));
-            article.setAvgRating(resultSet.getDouble("avg_rating"));
-            article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
-            return article;
-        });
+        return jdbcTemplate.query(ArticleQuery.GET_ALL.getSqlQuery(), mapper);
     }
 
     public List<ArticleListDto> getFreshArticles() {
-        List<ArticleListDto> myLsit = new ArrayList<>();
-        myLsit = jdbcTemplate.query(ArticleQuery.GET_FRESH.getSqlQuery(), (resultSet, i) -> {
-            ArticleListDto article = new ArticleListDto();
-            article.setId(resultSet.getInt("id"));
-            article.setPublicistName(resultSet.getString("name"));
-            article.setTitle(resultSet.getString("title"));
-            article.setSynopsys(resultSet.getString("synopsys"));
-            article.setAvgRating(resultSet.getDouble("avg_rating"));
-            article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
-            return article;
-        });
-        return myLsit;
+        return jdbcTemplate.query(ArticleQuery.GET_FRESH.getSqlQuery(), mapper);
+    }
+
+    public List<ArticleListDto> getTopArticles() {
+        return jdbcTemplate.query(ArticleQuery.GET_TOP.getSqlQuery(), mapper);
     }
 
     public Article getArticle(int id) {
@@ -113,6 +100,5 @@ public class ArticleRepository {
             return false;
         }
     }
-
 
 }
