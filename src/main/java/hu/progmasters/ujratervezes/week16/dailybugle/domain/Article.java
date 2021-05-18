@@ -14,4 +14,6 @@ public class Article {
     private String title;
     private String synopsys;
     private String text;
+    private double avgRating;
+    private int numOfRatings;
 }

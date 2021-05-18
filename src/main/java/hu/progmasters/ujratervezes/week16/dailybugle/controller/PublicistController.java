@@ -2,6 +2,7 @@ package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Publicist;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.PublicistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,18 +23,8 @@ public class PublicistController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Publicist>> getPublicists() {
+    public ResponseEntity<List<PublicistListDto>> getPublicists() {
         return new ResponseEntity<>(publicistService.getPublicists(), HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> savePublicist(@RequestBody PublicistCreateUpdateData data) {
-        boolean saveSuccesful = publicistService.savePublicist(data);
-        if (saveSuccesful) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
     }
 
     @GetMapping("/{id}")
@@ -43,6 +34,16 @@ public class PublicistController {
             return new ResponseEntity<>(publicist, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> savePublicist(@RequestBody PublicistCreateUpdateData data) {
+        boolean saveSuccesful = publicistService.savePublicist(data);
+        if (saveSuccesful) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 

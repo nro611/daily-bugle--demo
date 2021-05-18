@@ -44,6 +44,8 @@ public class ArticleRepository {
             article.setTitle(resultSet.getString("title"));
             article.setSynopsys(resultSet.getString("synopsys"));
             article.setText(resultSet.getString("text"));
+            article.setAvgRating(resultSet.getDouble("avg_rating"));
+            article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
             return article;
         }, id);
     }

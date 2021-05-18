@@ -2,6 +2,7 @@ package hu.progmasters.ujratervezes.week16.dailybugle.service;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Publicist;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.PublicistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class PublicistService {
         this.clock = clock;
     }
 
-    public List<Publicist> getPublicists() {
+    public List<PublicistListDto> getPublicists() {
         return publicistRepository.getPublicists();
     }
 
