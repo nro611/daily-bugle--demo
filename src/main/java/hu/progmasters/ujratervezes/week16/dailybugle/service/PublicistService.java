@@ -69,8 +69,6 @@ public class PublicistService {
             ioException.printStackTrace();
         }
         return succesfulWrite;
-
-
     }
 
     private void createDirectoryIfNotExists() {
