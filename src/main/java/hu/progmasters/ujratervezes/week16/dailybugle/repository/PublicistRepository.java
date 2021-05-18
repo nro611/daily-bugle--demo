@@ -35,22 +35,6 @@ public class PublicistRepository {
         });
     }
 
-    public boolean savePublicist(PublicistCreateUpdateData data, LocalDateTime now) {
-        String sql = "INSERT INTO publicist (name, address, email, phone, created_at) VALUES (?, ?, ?, ?, ?);";
-        try {
-            int rowsAffected = jdbcTemplate.update(sql,
-                    data.getName(),
-                    data.getAddress(),
-                    data.getEmail(),
-                    data.getPhone(),
-                    now
-            );
-            return rowsAffected == 1;
-        } catch (DataAccessException e) {
-            return false;
-        }
-    }
-
     public Publicist getPublicist(int id) {
         String sql = "SELECT * FROM publicist WHERE id = ?";
         try {
@@ -65,6 +49,22 @@ public class PublicistRepository {
             }, id);
         } catch (EmptyResultDataAccessException e) {
             return null;
+        }
+    }
+
+    public boolean savePublicist(PublicistCreateUpdateData data, LocalDateTime now) {
+        String sql = "INSERT INTO publicist (name, address, email, phone, created_at) VALUES (?, ?, ?, ?, ?);";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql,
+                    data.getName(),
+                    data.getAddress(),
+                    data.getEmail(),
+                    data.getPhone(),
+                    now
+            );
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
         }
     }
 
