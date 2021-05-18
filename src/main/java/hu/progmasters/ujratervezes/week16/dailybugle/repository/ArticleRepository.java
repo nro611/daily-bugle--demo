@@ -38,6 +38,10 @@ public class ArticleRepository {
         return jdbcTemplate.query(ArticleQuery.GET_TOP.getSqlQuery(), mapper);
     }
 
+    public List<ArticleListDto> getTopFreshArticles() {
+        return jdbcTemplate.query(ArticleQuery.GET_TOP_FRESH.getSqlQuery(), mapper);
+    }
+
     public Article getArticle(int id) {
         return jdbcTemplate.queryForObject(ArticleQuery.GET_ID.getSqlQuery(), (resultSet, i) -> {
             Article article = new Article();
@@ -100,5 +104,6 @@ public class ArticleRepository {
             return false;
         }
     }
+
 
 }

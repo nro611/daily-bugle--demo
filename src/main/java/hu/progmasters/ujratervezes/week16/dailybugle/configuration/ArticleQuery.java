@@ -44,9 +44,14 @@ public enum ArticleQuery {
             "ORDER BY avg_rating DESC " +
             "LIMIT 10"),
     // Get the 10 best rated articles that are 3 days old at most
-    GET_TOP_FRESH("SELECT article.id, title, synopsys, publicist.name FROM article " +
+    GET_TOP_FRESH("SELECT article.id, article.title, article.synopsys, publicist.name, " +
+            "CAST(AVG(rating.article_rating) AS DECIMAL(10,2)) AS avg_rating, " +
+            "COUNT(rating.article_rating) AS number_of_ratings " +
+            "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
+            "JOIN rating ON rating.article_id = article.id " +
             "WHERE sysdate() < ADDDATE(article.created_at, INTERVAL 3 DAY) " +
+            "GROUP BY article.id " +
             "ORDER BY avg_rating DESC " +
             "LIMIT 10"),
     // Update article

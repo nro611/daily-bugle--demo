@@ -36,14 +36,12 @@ public class ArticleController {
 
     @GetMapping("/top")
     public ResponseEntity<List<ArticleListDto>> getTopArticles() {
-        // TODO: Legjobban értékelt 10 cikk
         return new ResponseEntity<>(articleService.getTopArticles(), HttpStatus.OK);
     }
 
     @GetMapping("/top_fresh")
     public ResponseEntity<List<ArticleListDto>> getTopFreshArticles() {
-        // TODO: Legjobban értékelt 10 cikk, ami nem régebbi 3 napnál
-        return null;
+        return new ResponseEntity<>(articleService.getTopFreshArticles(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
