@@ -1,5 +1,6 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
+import hu.progmasters.ujratervezes.week16.dailybugle.configuration.ArticleQuery;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
@@ -22,9 +23,7 @@ public class ArticleRepository {
     }
 
     public List<ArticleListDto> getArticles() {
-        String sql = "SELECT article.id, title, synopsys, publicist.name FROM article " +
-                "JOIN publicist ON publicist.id = publicist_id";
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
+        return jdbcTemplate.query(ArticleQuery.GET_ALL.getSqlQuery(), (resultSet, i) -> {
             ArticleListDto article = new ArticleListDto();
             article.setId(resultSet.getInt("id"));
             article.setPublicistName(resultSet.getString("name"));
@@ -35,9 +34,7 @@ public class ArticleRepository {
     }
 
     public Article getArticle(int id) {
-        String sql = "SELECT article.id, publicist_id, title, synopsys, text, publicist.name FROM article " +
-                "JOIN publicist ON publicist.id = publicist_id";
-        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+        return jdbcTemplate.queryForObject(ArticleQuery.GET_ID.getSqlQuery(), (resultSet, i) -> {
             Article article = new Article();
             article.setId(resultSet.getInt("id"));
             article.setPublicistId(resultSet.getInt("publicist_id"));
@@ -50,14 +47,8 @@ public class ArticleRepository {
     }
 
     public boolean updateArticle(ArticleModifyDto data, int id, LocalDateTime now) {
-        String sql = "UPDATE article SET " +
-                "title = ?, " +
-                "synopsys = ?, " +
-                "text = ?, " +
-                "modified_at = ? " +
-                "WHERE id = ?";
         try {
-            int rowsAffected = jdbcTemplate.update(sql,
+            int rowsAffected = jdbcTemplate.update(ArticleQuery.UPDATE.getSqlQuery(),
                     data.getTitle(),
                     data.getSynopsys(),
                     data.getText(),
@@ -71,24 +62,17 @@ public class ArticleRepository {
     }
 
     public boolean deleteArticle(int id, LocalDateTime now) {
-        String sql = "UPDATE article SET " +
-                "status = 0, " +
-                "modified_at = ? " +
-                "WHERE id = ?";
         try {
-            int rowsAffected = jdbcTemplate.update(sql, now, id);
+            int rowsAffected = jdbcTemplate.update(ArticleQuery.DELETE.getSqlQuery(), now, id);
             return rowsAffected == 1;
         } catch (DataAccessException e) {
             return false;
         }
     }
 
-
     public boolean saveArticle(Integer publicist_id, String title, String synopsys, String text, LocalDateTime now) {
-        String sql = "INSERT INTO article (publicist_id, title, synopsys, text, created_at) " +
-                "VALUES (?, ?, ?, ?, ?)";
         try {
-            int rowsAffected = jdbcTemplate.update(sql,
+            int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE.getSqlQuery(),
                     publicist_id,
                     title,
                     synopsys,
