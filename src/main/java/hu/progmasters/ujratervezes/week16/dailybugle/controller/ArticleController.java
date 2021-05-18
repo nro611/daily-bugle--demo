@@ -1,6 +1,7 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPath;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.ArticleService;
@@ -37,9 +38,15 @@ public class ArticleController {
         }
     }
 
-    // TODO
-//    @PostMapping
-//    public ResponseEntity<Void> saveArticle(@RequestBody)
+    @PostMapping
+    public ResponseEntity<Void> saveArticle(@RequestBody ArticleImportPath articleImportPath) {
+        boolean saveSuccessful = articleService.saveArticle(articleImportPath);
+        if (saveSuccessful) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateArticle(@RequestBody ArticleModifyDto data, @PathVariable int id) {

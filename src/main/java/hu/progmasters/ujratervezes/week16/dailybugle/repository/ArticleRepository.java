@@ -82,4 +82,22 @@ public class ArticleRepository {
             return false;
         }
     }
+
+
+    public boolean saveArticle(Integer publicist_id, String title, String synopsys, String text, LocalDateTime now) {
+        String sql = "INSERT INTO article (publicist_id, title, synopsys, text, created_at) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql,
+                    publicist_id,
+                    title,
+                    synopsys,
+                    text,
+                    now
+            );
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
+    }
 }
