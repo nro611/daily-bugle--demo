@@ -24,9 +24,14 @@ public enum ArticleQuery {
             "WHERE article.id = ? " +
             "GROUP BY article.id"),
     // Get the 10 latest articles
-    GET_FRESH("SELECT article.id, title, synopsys, publicist.name FROM article " +
+    GET_FRESH("SELECT article.id, article.title, article.synopsys, publicist.name, " +
+            "CAST(AVG(rating.article_rating) AS DECIMAL(10,2)) AS avg_rating, " +
+            "COUNT(rating.article_rating) AS number_of_ratings " +
+            "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
-            "ORDER BY created_at DESC " +
+            "JOIN rating ON rating.article_id = article.id " +
+            "GROUP BY article.id " +
+            "ORDER BY article.created_at DESC " +
             "LIMIT 10"),
     // Get the 10 best rated articles
     GET_TOP("SELECT article.id, title, synopsys, publicist.name FROM article " +

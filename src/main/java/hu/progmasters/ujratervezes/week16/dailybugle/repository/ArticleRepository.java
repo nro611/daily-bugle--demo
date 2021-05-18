@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -33,6 +34,21 @@ public class ArticleRepository {
             article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
             return article;
         });
+    }
+
+    public List<ArticleListDto> getFreshArticles() {
+        List<ArticleListDto> myLsit = new ArrayList<>();
+        myLsit = jdbcTemplate.query(ArticleQuery.GET_FRESH.getSqlQuery(), (resultSet, i) -> {
+            ArticleListDto article = new ArticleListDto();
+            article.setId(resultSet.getInt("id"));
+            article.setPublicistName(resultSet.getString("name"));
+            article.setTitle(resultSet.getString("title"));
+            article.setSynopsys(resultSet.getString("synopsys"));
+            article.setAvgRating(resultSet.getDouble("avg_rating"));
+            article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
+            return article;
+        });
+        return myLsit;
     }
 
     public Article getArticle(int id) {

@@ -29,20 +29,10 @@ public class ArticleController {
         return new ResponseEntity<>(articleService.getArticles(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Article> getArticle(@PathVariable int id) {
-        Article article = articleService.getArticle(id);
-        if (article != null) {
-            return new ResponseEntity<>(article, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
     @GetMapping("/fresh")
     public ResponseEntity<List<ArticleListDto>> getFreshArticles() {
         // TODO: legfrissebb 10 cikk
-        return null;
+        return new ResponseEntity<>(articleService.getFreshArticles(), HttpStatus.OK);
     }
 
     @GetMapping("/top")
@@ -55,6 +45,16 @@ public class ArticleController {
     public ResponseEntity<List<ArticleListDto>> getTopFreshArticles() {
         // TODO: Legjobban értékelt 10 cikk, ami nem régebbi 3 napnál
         return null;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Article> getArticle(@PathVariable int id) {
+        Article article = articleService.getArticle(id);
+        if (article != null) {
+            return new ResponseEntity<>(article, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping

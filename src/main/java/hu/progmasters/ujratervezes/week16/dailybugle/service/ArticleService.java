@@ -35,6 +35,10 @@ public class ArticleService {
         return articleRepository.getArticles();
     }
 
+    public List<ArticleListDto> getFreshArticles() {
+        return articleRepository.getFreshArticles();
+    }
+
     public Article getArticle(int id) {
         return articleRepository.getArticle(id);
     }
@@ -77,4 +81,6 @@ public class ArticleService {
     public boolean deleteArticle(int id) {
         return articleRepository.deleteArticle(id, LocalDateTime.now(clock));
     }
+
+
 }
