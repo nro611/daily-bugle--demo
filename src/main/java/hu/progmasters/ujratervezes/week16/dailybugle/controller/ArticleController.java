@@ -32,10 +32,28 @@ public class ArticleController {
     public ResponseEntity<Article> getArticle(@PathVariable int id) {
         Article article = articleService.getArticle(id);
         if (article != null) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(article, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/fresh")
+    public ResponseEntity<List<ArticleListDto>> getFreshArticles() {
+        // TODO: legfrissebb 10 cikk
+        return null;
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<ArticleListDto>> getTopArticles() {
+        // TODO: Legjobban értékelt 10 cikk
+        return null;
+    }
+
+    @GetMapping("/top_fresh")
+    public ResponseEntity<List<ArticleListDto>> getTopFreshArticles() {
+        // TODO: Legjobban értékelt 10 cikk, ami nem régebbi 3 napnál
+        return null;
     }
 
     @PostMapping
@@ -67,6 +85,4 @@ public class ArticleController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-
 }
