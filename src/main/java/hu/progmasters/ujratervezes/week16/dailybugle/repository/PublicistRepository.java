@@ -93,6 +93,7 @@ public class PublicistRepository {
 
     public boolean deletePublicist(int id, LocalDateTime now) {
         String sql = "UPDATE publicist SET " +
+                "name = Névtelen Szerző" +
                 "address = NULL, " +
                 "email = NULL, " +
                 "phone = NULL, " +
