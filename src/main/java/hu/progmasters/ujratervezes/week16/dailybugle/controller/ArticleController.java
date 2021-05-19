@@ -68,7 +68,7 @@ public class ArticleController {
     public ResponseEntity<Void> saveRating(@RequestBody ArticleRating data, @PathVariable int id) {
         boolean rateSuccessful = articleService.saveRating(data, id);
         if (rateSuccessful) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
