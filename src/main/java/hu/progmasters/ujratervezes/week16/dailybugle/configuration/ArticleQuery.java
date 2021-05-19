@@ -7,32 +7,24 @@ import lombok.Getter;
 @Getter
 public enum ArticleQuery {
     // Get every article in a list with average rating (2 decimals) and number of ratings
-    GET_ALL("SELECT article.id, article.title, article.synopsys, publicist.name, " +
+    GET_ALL("SELECT article.id, " +
+            "article.title, " +
+            "article.synopsys, " +
+            "publicist.name, " +
             "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
-            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings " +
+            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings, " +
+            "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
-            "JOIN rating ON rating.article_id = article.id " +
-            "GROUP BY article.id"),
+            "LEFT JOIN rating ON rating.article_id = article.id " +
+            "LEFT JOIN (" +
+            "  SELECT article_id, COUNT(*) as CommentCount " +
+            "  FROM comment " +
+            "  WHERE comment.status = 1 " +
+            "  GROUP BY article_id " +
+            ") c ON article.id = c.article_id " +
+            "GROUP BY article.id;"),
 
-    /*
-        Kommentek számának hozzáadása a RShez
-    //  TODO
-            SELECT a.id, a.title, a.synopsys, p.name,
-            IFNULL(CAST(AVG(r.article_rating) AS DECIMAL(10,2)),0) AS avg_rating,
-            IFNULL(COUNT(r.article_rating),0) AS number_of_ratings,
-            -- IFNULL(COUNT(CASE WHEN c.status = 1 THEN 1 END),0) AS number_of_comments
-            FROM article a
-            JOIN publicist p ON p.id = a.publicist_id
-            LEFT JOIN rating r ON r.article_id = a.id
-            -- LEFT JOIN comment c ON c.article_id = a.id
-            GROUP BY a.id;
-
-        Ez lenne az ötlet, de a kikommentelt sorokkal nem jó számok jönnek a number_of_comments-re.
-        Megszorozza számot az adott article-höz tartozó commentek számával, és ezt adja vissza
-        comment számként is...
-
-     */
     // Get article by id
     GET_ID("SELECT article.id, publicist_id, title, synopsys, text, publicist.name, " +
             "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +

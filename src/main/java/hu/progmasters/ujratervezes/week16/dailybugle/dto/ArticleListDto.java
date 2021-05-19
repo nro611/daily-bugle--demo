@@ -14,4 +14,5 @@ public class ArticleListDto {
     private String synopsys;
     private double avgRating;
     private int numOfRatings;
+    private int numOfComments;
 }

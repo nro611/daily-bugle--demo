@@ -19,6 +19,7 @@ public class ArticleListMapper implements RowMapper<ArticleListDto> {
         article.setSynopsys(resultSet.getString("synopsys"));
         article.setAvgRating(resultSet.getDouble("avg_rating"));
         article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
+        article.setNumOfComments(resultSet.getInt("number_of_comments"));
         return article;
     }
 }
