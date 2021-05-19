@@ -18,15 +18,15 @@ public enum ArticleQuery {
     /*
         Kommentek számának hozzáadása a RShez
     //  TODO
-        SELECT article.id, article.title, article.synopsys, publicist.name,
-        IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating,
-        IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings
-        -- , IFNULL(COUNT(CASE WHEN comment.status = 1 THEN 1 END),0) AS number_of_comments
-        FROM article
-        JOIN publicist ON publicist.id = article.publicist_id
-        LEFT JOIN rating ON rating.article_id = article.id
-        -- LEFT JOIN comment ON comment.article_id = article.id
-        GROUP BY article.id;
+            SELECT a.id, a.title, a.synopsys, p.name,
+            IFNULL(CAST(AVG(r.article_rating) AS DECIMAL(10,2)),0) AS avg_rating,
+            IFNULL(COUNT(r.article_rating),0) AS number_of_ratings,
+            -- IFNULL(COUNT(CASE WHEN c.status = 1 THEN 1 END),0) AS number_of_comments
+            FROM article a
+            JOIN publicist p ON p.id = a.publicist_id
+            LEFT JOIN rating r ON r.article_id = a.id
+            -- LEFT JOIN comment c ON c.article_id = a.id
+            GROUP BY a.id;
 
         Ez lenne az ötlet, de a kikommentelt sorokkal nem jó számok jönnek a number_of_comments-re.
         Megszorozza számot az adott article-höz tartozó commentek számával, és ezt adja vissza
