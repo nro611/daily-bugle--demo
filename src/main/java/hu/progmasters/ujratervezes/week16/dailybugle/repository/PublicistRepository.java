@@ -56,6 +56,7 @@ public class PublicistRepository {
         }
     }
 
+    // gets all articles by a publicist in a descending order, used in getPublicist for articleList
     private List<ArticleListDto> getArticlesByPublicist(int id) {
         List<ArticleListDto> articles = new ArrayList<>();
         String sql = "SELECT a.id, p.name, a.title, a.synopsys, " +
@@ -67,7 +68,6 @@ public class PublicistRepository {
                 "WHERE p.id = ? " +
                 "GROUP BY a.id " +
                 "ORDER BY a.created_at DESC;";
-        // TODO list all comments when getting article by id
         try {
             articles = jdbcTemplate.query(sql, (resultSet, i) -> {
                 ArticleListDto article = new ArticleListDto();
