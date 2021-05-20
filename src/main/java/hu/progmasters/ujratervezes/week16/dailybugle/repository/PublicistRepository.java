@@ -3,7 +3,7 @@ package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Publicist;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PhonebookDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -86,7 +86,7 @@ public class PublicistRepository {
 
     }
 
-    public boolean savePublicist(PublicistCreateUpdateData data, LocalDateTime now) {
+    public boolean savePublicist(PublicistDto data, LocalDateTime now) {
         String sql = "INSERT INTO publicist (name, address, email, phone, created_at) VALUES (?, ?, ?, ?, ?);";
         try {
             int rowsAffected = jdbcTemplate.update(sql,
@@ -102,7 +102,7 @@ public class PublicistRepository {
         }
     }
 
-    public boolean updatePublicist(int id, PublicistCreateUpdateData data, LocalDateTime now) {
+    public boolean updatePublicist(int id, PublicistDto data, LocalDateTime now) {
         String sql = "UPDATE publicist SET " +
                 "name = ?, " +
                 "address = ?, " +

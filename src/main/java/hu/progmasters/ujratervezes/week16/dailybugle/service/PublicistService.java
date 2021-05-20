@@ -1,7 +1,7 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.service;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Publicist;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.PublicistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class PublicistService {
         return publicistRepository.getPublicists();
     }
 
-    public boolean savePublicist(PublicistCreateUpdateData data) {
+    public boolean savePublicist(PublicistDto data) {
         return publicistRepository.savePublicist(data, LocalDateTime.now(clock));
 
     }
@@ -44,7 +44,7 @@ public class PublicistService {
         return publicistRepository.getPublicist(id);
     }
 
-    public boolean updatePublicist(int id, PublicistCreateUpdateData data) {
+    public boolean updatePublicist(int id, PublicistDto data) {
         return publicistRepository.updatePublicist(id, data, LocalDateTime.now(clock));
     }
 

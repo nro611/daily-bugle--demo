@@ -4,10 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @Getter
 @Setter
-public class ArticleRating {
-    private int readerId;
-    private int rating;
+public class CommentDto {
+    private String commentAuthor;
+    private String commentText;
+    private LocalDateTime time;
 }

@@ -4,13 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @NoArgsConstructor
 @Getter
 @Setter
-public class CommentCreateUpdateData {
-    private String commentAuthor;
-    private String commentText;
-    private LocalDateTime time;
+public class PublicistDto {
+    private String name;
+    private String address;
+    private String email;
+    private String phone;
 }

@@ -1,6 +1,6 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,7 +18,7 @@ public class CommentRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean saveComment(CommentCreateUpdateData data, int articleId, LocalDateTime now) {
+    public boolean saveComment(CommentDto data, int articleId, LocalDateTime now) {
         String sql = "INSERT INTO comment (comment_author, comment_text, article_id, created_at) " +
                 "VALUES (?, ?, ?, ?)";
         try {

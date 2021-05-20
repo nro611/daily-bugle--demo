@@ -8,6 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ArticleImportPath {
+public class ArticleImportPathDto {
     private String path;
 }

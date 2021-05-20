@@ -1,7 +1,7 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Publicist;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.PublicistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class PublicistController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> savePublicist(@RequestBody PublicistCreateUpdateData data) {
+    public ResponseEntity<Void> savePublicist(@RequestBody PublicistDto data) {
         boolean saveSuccesful = publicistService.savePublicist(data);
         if (saveSuccesful) {
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -48,7 +48,7 @@ public class PublicistController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updatePublicist(@PathVariable int id, @RequestBody PublicistCreateUpdateData data) {
+    public ResponseEntity<Void> updatePublicist(@PathVariable int id, @RequestBody PublicistDto data) {
         boolean updateSuccessful = publicistService.updatePublicist(id, data);
         if (updateSuccessful) {
             return new ResponseEntity<>(HttpStatus.OK);

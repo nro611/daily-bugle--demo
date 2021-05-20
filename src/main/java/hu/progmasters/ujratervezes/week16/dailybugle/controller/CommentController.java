@@ -1,6 +1,6 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CommentController {
     }
 
     @PostMapping("/{articleId}")
-    public ResponseEntity<Void> saveComment(@RequestBody CommentCreateUpdateData data, @PathVariable int articleId) {
+    public ResponseEntity<Void> saveComment(@RequestBody CommentDto data, @PathVariable int articleId) {
         boolean saveSuccessful = commentService.saveComment(data, articleId);
         if (saveSuccessful) {
             return new ResponseEntity<>(HttpStatus.CREATED);

@@ -7,9 +7,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PublicistCreateUpdateData {
-    private String name;
-    private String address;
-    private String email;
-    private String phone;
+public class ArticleRatingDto {
+    private int readerId;
+    private int rating;
 }

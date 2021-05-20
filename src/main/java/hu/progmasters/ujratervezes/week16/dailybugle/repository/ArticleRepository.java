@@ -3,8 +3,8 @@ package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRating;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -66,9 +66,9 @@ public class ArticleRepository {
         }
     }
 
-    private List<CommentCreateUpdateData> getCommentsForArticle(int id) {
+    private List<CommentDto> getCommentsForArticle(int id) {
         return jdbcTemplate.query(ArticleQuery.GET_COMMENTS_FOR_ARTICLE_ID.getSqlQuery(), (resultSet, i) -> {
-            CommentCreateUpdateData comment = new CommentCreateUpdateData();
+            CommentDto comment = new CommentDto();
             comment.setCommentAuthor(resultSet.getString("username"));
             comment.setCommentText(resultSet.getString("comment_text"));
             comment.setTime(resultSet.getTimestamp("created_at").toLocalDateTime());
@@ -94,10 +94,10 @@ public class ArticleRepository {
         }
     }
 
-    public ArticleRating getRatingWithUserAndArticle(int readerId, int articleId) {
+    public ArticleRatingDto getRatingWithUserAndArticle(int readerId, int articleId) {
         try {
             return jdbcTemplate.queryForObject(ArticleQuery.GET_RATING_USER_ARTICLE.getSqlQuery(), (resultSet, i) -> {
-                ArticleRating rating = new ArticleRating();
+                ArticleRatingDto rating = new ArticleRatingDto();
                 rating.setReaderId(resultSet.getInt("reader_id"));
                 rating.setRating(resultSet.getInt("article_rating"));
                 return rating;

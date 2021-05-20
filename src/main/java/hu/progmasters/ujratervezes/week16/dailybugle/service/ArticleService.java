@@ -1,10 +1,10 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.service;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPath;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRating;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,10 +55,10 @@ public class ArticleService {
         return articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
     }
 
-    public boolean saveArticle(ArticleImportPath articleImportPath) {
+    public boolean saveArticle(ArticleImportPathDto articleImportPathDto) {
         boolean saveSuccessful = false;
         List<String> lines = new ArrayList<>();
-        Path path = Path.of(articleImportPath.getPath());
+        Path path = Path.of(articleImportPathDto.getPath());
 
         try {
             lines = Files.readAllLines(path);
@@ -76,7 +76,7 @@ public class ArticleService {
         return saveSuccessful;
     }
 
-    public boolean saveRating(ArticleRating data, int articleId) {
+    public boolean saveRating(ArticleRatingDto data, int articleId) {
         int rating = data.getRating();
         if (rating >= 1 && rating <= 5) {
             if (articleRepository.getRatingWithUserAndArticle(data.getReaderId(), articleId) != null) {

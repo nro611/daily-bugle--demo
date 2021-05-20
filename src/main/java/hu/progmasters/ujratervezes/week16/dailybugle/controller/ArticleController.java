@@ -1,10 +1,10 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPath;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRating;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,8 +55,8 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveArticle(@RequestBody ArticleImportPath articleImportPath) {
-        boolean saveSuccessful = articleService.saveArticle(articleImportPath);
+    public ResponseEntity<Void> saveArticle(@RequestBody ArticleImportPathDto articleImportPathDto) {
+        boolean saveSuccessful = articleService.saveArticle(articleImportPathDto);
         if (saveSuccessful) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
@@ -65,7 +65,7 @@ public class ArticleController {
     }
 
     @PostMapping("/rating/{id}")
-    public ResponseEntity<Void> saveRating(@RequestBody ArticleRating data, @PathVariable int id) {
+    public ResponseEntity<Void> saveRating(@RequestBody ArticleRatingDto data, @PathVariable int id) {
         boolean rateSuccessful = articleService.saveRating(data, id);
         if (rateSuccessful) {
             return new ResponseEntity<>(HttpStatus.CREATED);

@@ -1,6 +1,6 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.service;
 
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentCreateUpdateData;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class CommentService {
     }
 
 
-    public boolean saveComment(CommentCreateUpdateData data, int articleId) {
+    public boolean saveComment(CommentDto data, int articleId) {
         return commentRepository.saveComment(data, articleId, LocalDateTime.now(clock));
     }
 }
