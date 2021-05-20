@@ -26,7 +26,7 @@ public class PublicistRepository {
     }
 
     public List<PublicistListDto> getPublicists() {
-        String sql = "SELECT * from publicist";
+        String sql = "SELECT * from publicist WHERE status = 1";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             PublicistListDto publicist = new PublicistListDto();
             publicist.setId(resultSet.getInt("id"));
@@ -39,7 +39,7 @@ public class PublicistRepository {
     }
 
     public Publicist getPublicist(int id) {
-        String sql = "SELECT * FROM publicist WHERE id = ?";
+        String sql = "SELECT * FROM publicist WHERE id = ? AND status = 1";
         try {
             return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
                 Publicist publicist = new Publicist();
@@ -65,7 +65,7 @@ public class PublicistRepository {
                 "FROM article a " +
                 "JOIN publicist p ON p.id = a.publicist_id " +
                 "LEFT JOIN rating r ON r.article_id = a.id " +
-                "WHERE p.id = ? " +
+                "WHERE p.id = ? AND a.status = 1 " +
                 "GROUP BY a.id " +
                 "ORDER BY a.created_at DESC;";
         try {
@@ -143,7 +143,7 @@ public class PublicistRepository {
     }
 
     public List<PhonebookDto> getPhonebook() {
-        String sql = "SELECT name, phone FROM publicist";
+        String sql = "SELECT name, phone FROM publicist WHERE status = 1";
         return jdbcTemplate.query(sql, (resultSet, i) -> {
             PhonebookDto phonebook = new PhonebookDto();
             phonebook.setName(resultSet.getString("name"));
