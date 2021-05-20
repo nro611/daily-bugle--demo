@@ -76,10 +76,14 @@ public class ArticleService {
         return saveSuccessful;
     }
 
-    public boolean saveRating(ArticleRating data, int id) {
+    public boolean saveRating(ArticleRating data, int articleId) {
         int rating = data.getRating();
         if (rating >= 1 && rating <= 5) {
-            return articleRepository.saveRating(rating, id);
+            if (articleRepository.getRatingWithUserAndArticle(data.getReaderId(), articleId) != null) {
+                return articleRepository.updateRating(data.getReaderId(), articleId, rating, LocalDateTime.now(clock));
+            } else {
+                return articleRepository.saveRating(data.getReaderId(), articleId, rating, LocalDateTime.now(clock));
+            }
         } else {
             return false;
         }

@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ArticleRating {
+    private int readerId;
     private int rating;
 }
