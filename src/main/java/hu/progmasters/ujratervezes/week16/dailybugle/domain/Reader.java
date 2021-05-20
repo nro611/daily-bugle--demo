@@ -11,4 +11,5 @@ public class Reader {
     private int id;
     private String userName;
     private String email;
+    private int commentCount;
 }
