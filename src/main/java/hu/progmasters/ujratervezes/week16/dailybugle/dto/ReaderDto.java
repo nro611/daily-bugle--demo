@@ -7,7 +7,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ReaderCreateUpdateData {
+public class ReaderDto {
     private String userName;
     private String email;
 }
