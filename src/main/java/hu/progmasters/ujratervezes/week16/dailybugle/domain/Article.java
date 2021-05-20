@@ -1,8 +1,11 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.domain;
 
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentCreateUpdateData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,4 +19,5 @@ public class Article {
     private String text;
     private double avgRating;
     private int numOfRatings;
+    private List<CommentCreateUpdateData> comments;
 }

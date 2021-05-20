@@ -4,6 +4,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.configuration.ArticleQuery;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentCreateUpdateData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -56,8 +58,21 @@ public class ArticleRepository {
             article.setText(resultSet.getString("text"));
             article.setAvgRating(resultSet.getDouble("avg_rating"));
             article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
+            article.setComments(getCommentsForArticle(id));
             return article;
         }, id);
+    }
+
+    private List<CommentCreateUpdateData> getCommentsForArticle(int id) {
+        List<CommentCreateUpdateData> comments = new ArrayList<>();
+        comments = jdbcTemplate.query(ArticleQuery.GET_COMMENTS_FOR_ARTICLE_ID.getSqlQuery(), (resultSet, i) -> {
+            CommentCreateUpdateData comment = new CommentCreateUpdateData();
+            comment.setCommentAuthor(resultSet.getString("username"));
+            comment.setCommentText(resultSet.getString("comment_text"));
+            comment.setTime(resultSet.getTimestamp("created_at").toLocalDateTime());
+            return comment;
+        }, id);
+        return comments;
     }
 
     public boolean saveRating(int rating, int id) {

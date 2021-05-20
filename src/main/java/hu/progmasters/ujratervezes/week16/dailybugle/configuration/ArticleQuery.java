@@ -80,7 +80,12 @@ public enum ArticleQuery {
     // Import article into db
     SAVE_ARTICLE("INSERT INTO article (publicist_id, title, synopsys, text, created_at) " +
             "VALUES (?, ?, ?, ?, ?)"),
-    SAVE_RATING("INSERT INTO rating (article_id, article_rating) VALUES (?, ?)");
+    SAVE_RATING("INSERT INTO rating (article_id, article_rating) VALUES (?, ?)"),
+    GET_COMMENTS_FOR_ARTICLE_ID("SELECT r.username, c.comment_text, c.created_at " +
+            "FROM comment c " +
+            "JOIN reader r ON r.id = c.reader_id " +
+            "WHERE c.article_id = ? " +
+            "ORDER BY c.created_at DESC");
 
     private final String sqlQuery;
 
