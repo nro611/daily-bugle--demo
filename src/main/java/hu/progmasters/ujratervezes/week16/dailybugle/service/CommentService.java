@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Transactional
 public class CommentService {
 
-    private CommentRepository commentRepository;
-    private Clock clock;
+    private final CommentRepository commentRepository;
+    private final Clock clock;
 
     @Autowired
     public CommentService(CommentRepository commentRepository, Clock clock) {

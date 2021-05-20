@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public class PublicistRepository {
 
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public PublicistRepository(JdbcTemplate jdbcTemplate) {
@@ -67,6 +67,7 @@ public class PublicistRepository {
                 "WHERE p.id = ? " +
                 "GROUP BY a.id " +
                 "ORDER BY a.created_at DESC;";
+        // TODO list all comments when getting article by id
         try {
             articles = jdbcTemplate.query(sql, (resultSet, i) -> {
                 ArticleListDto article = new ArticleListDto();
