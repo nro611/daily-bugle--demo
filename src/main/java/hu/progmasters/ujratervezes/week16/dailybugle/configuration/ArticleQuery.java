@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ArticleQuery {
-    // Get every article in a list with average rating (2 decimals) and number of ratings
+    // Get every article in a list with average rating (2 decimals) and number of ratings and comments
     GET_ALL("SELECT article.id, " +
             "article.title, " +
             "article.synopsys, " +
@@ -23,8 +23,8 @@ public enum ArticleQuery {
             "  WHERE comment.status = 1 " +
             "  GROUP BY article_id " +
             ") c ON article.id = c.article_id " +
+            "WHERE article.status = 1 " +
             "GROUP BY article.id;"),
-
     // Get article by id
     GET_ID("SELECT article.id, publicist_id, title, synopsys, text, publicist.name, " +
             "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
