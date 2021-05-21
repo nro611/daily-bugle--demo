@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,6 +33,14 @@ public class ReaderService {
     }
 
     public boolean saveReader(ReaderDto data) {
-        return false;
+        return readerRepository.saveReader(data, LocalDateTime.now(clock));
+    }
+
+    public boolean updateReader(ReaderDto data, int id) {
+        return readerRepository.updateReader(data, id, LocalDateTime.now(clock));
+    }
+
+    public boolean deleteReader(int id) {
+        return readerRepository.deleteReader(id, LocalDateTime.now(clock));
     }
 }

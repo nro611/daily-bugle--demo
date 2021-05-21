@@ -46,4 +46,24 @@ public class ReaderController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateReader(@RequestBody ReaderDto data, @PathVariable int id) {
+        boolean updateSuccessful = readerService.updateReader(data, id);
+        if (updateSuccessful) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReader(@PathVariable int id) {
+        boolean deleteSuccessful = readerService.deleteReader(id);
+        if (deleteSuccessful) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
