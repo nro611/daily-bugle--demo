@@ -1,13 +1,17 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Reader;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderCommentedArticleDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderProfileDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderRatedArticleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -41,6 +45,60 @@ public class ReaderRepository {
             reader.setCommentCount(resultSet.getInt("number_of_comments"));
             return reader;
         });
+    }
+
+    public ReaderProfileDto getReader(int id) {
+        String sql = "SELECT r.username, r.email " +
+                "FROM reader r " +
+                "WHERE r.id = ?";
+        ReaderProfileDto readerProfile = jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+            ReaderProfileDto reader = new ReaderProfileDto();
+            reader.setName(resultSet.getString("username"));
+            reader.setEmail(resultSet.getString("email"));
+            reader.setCommentedArticles(getCommentedArticles(id));
+            reader.setRatedArticles(getRatedArticles(id));
+            return reader;
+        }, id);
+        return readerProfile;
+    }
+
+    // minden cikk ID-ja és címe, ami alá kommentelt az olvasó, és a hozzá tartozó kommentek száma
+    private List<ReaderCommentedArticleDto> getCommentedArticles(int id) {
+        List<ReaderCommentedArticleDto> commentedArticles = new ArrayList<>();
+        String sql = "SELECT a.id AS article_id, a.title, COUNT(c.id) AS comment_count " +
+                "FROM article a " +
+                "LEFT JOIN comment c ON a.id = c.article_id " +
+                "WHERE c.reader_id = ? " +
+                "GROUP BY a.title";
+        try {
+            commentedArticles = jdbcTemplate.query(sql, (resultSet, i) -> {
+                ReaderCommentedArticleDto readerCommentedArticle = new ReaderCommentedArticleDto();
+                readerCommentedArticle.setArticleId(resultSet.getInt("article_id"));
+                readerCommentedArticle.setArticleTitle(resultSet.getString("title"));
+                readerCommentedArticle.setCommentCount(resultSet.getInt("comment_count"));
+                return readerCommentedArticle;
+            }, id);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return commentedArticles;
+    }
+
+    // minden cikk ID-ja és címe, amit értékelt az olvasó, és az adott értékelés
+    private List<ReaderRatedArticleDto> getRatedArticles(int id) {
+        List<ReaderRatedArticleDto> ratedArticles = new ArrayList<>();
+        String sql = "SELECT a.id AS article_id, a.title, r.article_rating " +
+                "FROM article a  " +
+                "LEFT JOIN rating r ON a.id = r.article_id " +
+                "WHERE r.reader_id = ?";
+        ratedArticles = jdbcTemplate.query(sql, (resultSet, i) -> {
+            ReaderRatedArticleDto readerRatedArticleDto = new ReaderRatedArticleDto();
+            readerRatedArticleDto.setArticleId(resultSet.getInt("article_id"));
+            readerRatedArticleDto.setArticleTitle(resultSet.getString("title"));
+            readerRatedArticleDto.setRatingGiven(resultSet.getInt("article_rating"));
+            return readerRatedArticleDto;
+        }, id);
+        return ratedArticles;
     }
 
     public boolean saveReader(ReaderDto data, LocalDateTime now) {

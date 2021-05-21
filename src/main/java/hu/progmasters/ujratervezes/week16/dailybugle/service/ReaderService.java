@@ -2,6 +2,7 @@ package hu.progmasters.ujratervezes.week16.dailybugle.service;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Reader;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderProfileDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.ReaderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,8 @@ public class ReaderService {
         return readerRepository.getReaders();
     }
 
-    public Reader getReader(int id) {
-        return null;
+    public ReaderProfileDto getReader(int id) {
+        return readerRepository.getReader(id);
     }
 
     public boolean saveReader(ReaderDto data) {

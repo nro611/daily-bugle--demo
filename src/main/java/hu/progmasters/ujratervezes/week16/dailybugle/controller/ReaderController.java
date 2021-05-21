@@ -2,6 +2,7 @@ package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Reader;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderProfileDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.ReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,8 @@ public class ReaderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reader> getReader(@PathVariable int id) {
-        Reader reader = readerService.getReader(id);
+    public ResponseEntity<ReaderProfileDto> getReader(@PathVariable int id) {
+        ReaderProfileDto reader = readerService.getReader(id);
         if (reader != null) {
             return new ResponseEntity<>(reader, HttpStatus.OK);
         } else {
