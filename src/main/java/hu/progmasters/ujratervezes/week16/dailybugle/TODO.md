@@ -1,15 +1,3 @@
-### Comment
-Id alapján cikk elkérésekor összes komment megjelenítése időrendben csökkenő sorrendben
-
-### Reader, table
-  - dto
-  - kapcsolótábla probably
-  - rating readerhez kötése
-  - reader 1 cikket 1szer értékelhet
-  - új értékelés már meglévőre felülírja
-  - getReaders
-    - id, email, username, COUNT(comments)
-
 ### Olvasói profil
 
 - reader ID alapján
@@ -17,7 +5,7 @@ Id alapján cikk elkérésekor összes komment megjelenítése időrendben csök
     - username
     - minden értékelt cikk id-ja és címe
     - az adott cikkre adott értékelés
-    - minden commentelt cik id-ja és címe
+    - minden commentelt cikk id-ja és címe
     - az adott cikkhez tartozó commentek száma
     
 ### Időzített cikk
@@ -30,5 +18,5 @@ wip
 
 ### Módosítások története
 
-iwp
+wip
   
