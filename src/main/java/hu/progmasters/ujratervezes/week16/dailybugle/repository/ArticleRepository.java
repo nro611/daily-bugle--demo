@@ -146,6 +146,23 @@ public class ArticleRepository {
         }
     }
 
+    public boolean saveArticleWithDeployTime(Integer publicist_id, String title, String synopsys, String text, LocalDateTime now, LocalDateTime deployTime) {
+        try {
+            int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_ARTICLE_DEPLOY.getSqlQuery(),
+                    publicist_id,
+                    title,
+                    synopsys,
+                    text,
+                    now,
+                    deployTime
+            );
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
+
+    }
+
     @Component
     private static class ArticleListMapper implements RowMapper<ArticleListDto> {
 

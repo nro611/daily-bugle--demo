@@ -80,6 +80,8 @@ public enum ArticleQuery {
     // Import article into db
     SAVE_ARTICLE("INSERT INTO article (publicist_id, title, synopsys, text, created_at) " +
             "VALUES (?, ?, ?, ?, ?)"),
+    SAVE_ARTICLE_DEPLOY("INSERT INTO article (publicist_id, title, synopsys, text, created_at, deployed_at) " +
+            "VALUES (?, ?, ?, ?, ?, ?)"),
     GET_RATING_USER_ARTICLE("SELECT reader_id, article_rating " +
             "FROM rating " +
             "WHERE reader_id = ? AND article_id = ?"),

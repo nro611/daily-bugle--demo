@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -56,8 +56,10 @@ public class ArticleService {
     }
 
     public boolean saveArticle(ArticleImportPathDto articleImportPathDto) {
+        int dC = 1; // deployCounter
         boolean saveSuccessful = false;
-        List<String> lines = new ArrayList<>();
+        LocalDateTime deployTime = null;
+        List<String> lines;
         Path path = Path.of(articleImportPathDto.getPath());
 
         try {
@@ -66,13 +68,43 @@ public class ArticleService {
             return saveSuccessful;
         }
 
-        Integer publicist_id = Integer.parseInt(lines.get(0));
-        String title = lines.get(1);
-        String synopsys = lines.get(2);
-        String text = String.join("\n", lines.subList(3, lines.size()));
+        // Checks if the 0th index of the List (first line of the text file) is a String that can be parsed
+        // as a LocalDateTime
+        // Said String should appear in the following format:
+        // YYYY-MM-DDThh:mm:ss
+        // e.g: 2007-12-03T10:15:30
+        try {
+            deployTime = LocalDateTime.parse(lines.get(0));
+        } catch (DateTimeParseException | IndexOutOfBoundsException e) {
+            dC = 0;
+        }
 
-        saveSuccessful = articleRepository.saveArticle(publicist_id, title, synopsys, text, LocalDateTime.now(clock));
+        if (lines.size() < 4 + dC) return saveSuccessful;
 
+        saveSuccessful = isSaveSuccessful(lines, dC, deployTime);
+
+        return saveSuccessful;
+    }
+
+    private boolean isSaveSuccessful(List<String> lines, int dC, LocalDateTime deployTime) {
+        boolean saveSuccessful;
+        Integer publicist_id = Integer.parseInt(lines.get(dC));
+        String title = lines.get(dC + 1);
+        String synopsys = lines.get(dC + 2);
+        String text = String.join("\n", lines.subList(dC + 3, lines.size()));
+
+        if (deployTime != null) {
+            saveSuccessful = articleRepository.saveArticleWithDeployTime(
+                    publicist_id,
+                    title,
+                    synopsys,
+                    text,
+                    LocalDateTime.now(clock),
+                    deployTime
+            );
+        } else {
+            saveSuccessful = articleRepository.saveArticle(publicist_id, title, synopsys, text, LocalDateTime.now(clock));
+        }
         return saveSuccessful;
     }
 
