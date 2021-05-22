@@ -65,7 +65,7 @@ public class PublicistRepository {
                 "FROM article a " +
                 "JOIN publicist p ON p.id = a.publicist_id " +
                 "LEFT JOIN rating r ON r.article_id = a.id " +
-                "WHERE p.id = ? AND a.status = 1 " +
+                "WHERE p.id = ? AND a.status = 1 AND (a.deployed_at <= CURRENT_TIMESTAMP OR a.deployed_at IS NULL)" +
                 "GROUP BY a.id " +
                 "ORDER BY a.created_at DESC;";
         try {

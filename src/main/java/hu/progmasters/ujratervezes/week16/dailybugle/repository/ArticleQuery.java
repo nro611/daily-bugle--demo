@@ -31,37 +31,61 @@ public enum ArticleQuery {
             "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings " +
             "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
-            "JOIN rating ON rating.article_id = article.id " +
+            "LEFT JOIN rating ON rating.article_id = article.id " +
             "WHERE article.id = ? AND article.status = 1 " +
             "GROUP BY article.id"),
     // Get the 10 latest articles
     GET_FRESH_ARTICLE("SELECT article.id, article.title, article.synopsys, publicist.name, " +
             "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
-            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings " +
+            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings, " +
+            "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
-            "JOIN rating ON rating.article_id = article.id " +
+            "LEFT JOIN rating ON rating.article_id = article.id " +
+            "LEFT JOIN (" +
+            "  SELECT article_id, COUNT(*) as CommentCount " +
+            "  FROM comment " +
+            "  WHERE comment.status = 1 " +
+            "  GROUP BY article_id " +
+            ") c ON article.id = c.article_id " +
+            "WHERE article.status = 1 AND (article.deployed_at <= CURRENT_TIMESTAMP OR article.deployed_at IS NULL)" +
             "GROUP BY article.id " +
             "ORDER BY article.created_at DESC " +
             "LIMIT 10"),
     // Get the 10 best rated articles
     GET_TOP_ARTICLE("SELECT article.id, article.title, article.synopsys, publicist.name, " +
             "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
-            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings " +
+            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings, " +
+            "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
-            "JOIN rating ON rating.article_id = article.id " +
+            "LEFT JOIN rating ON rating.article_id = article.id " +
+            "LEFT JOIN (" +
+            "  SELECT article_id, COUNT(*) as CommentCount " +
+            "  FROM comment " +
+            "  WHERE comment.status = 1 " +
+            "  GROUP BY article_id " +
+            ") c ON article.id = c.article_id " +
+            "WHERE article.status = 1 AND (article.deployed_at <= CURRENT_TIMESTAMP OR article.deployed_at IS NULL)" +
             "GROUP BY article.id " +
             "ORDER BY avg_rating DESC " +
             "LIMIT 10"),
     // Get the 10 best rated articles that are 3 days old at most
     GET_TOP_FRESH_ARTICLE("SELECT article.id, article.title, article.synopsys, publicist.name, " +
             "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
-            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings " +
+            "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings," +
+            "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
-            "JOIN rating ON rating.article_id = article.id " +
-            "WHERE sysdate() < ADDDATE(article.created_at, INTERVAL 3 DAY) " +
+            "LEFT JOIN rating ON rating.article_id = article.id " +
+            "LEFT JOIN (" +
+            "  SELECT article_id, COUNT(*) as CommentCount " +
+            "  FROM comment " +
+            "  WHERE comment.status = 1 " +
+            "  GROUP BY article_id " +
+            ") c ON article.id = c.article_id " +
+            "WHERE sysdate() < ADDDATE(article.created_at, INTERVAL 3 DAY) AND " +
+            "article.status = 1 AND (article.deployed_at <= CURRENT_TIMESTAMP OR article.deployed_at IS NULL)" +
             "GROUP BY article.id " +
             "ORDER BY avg_rating DESC " +
             "LIMIT 10"),
