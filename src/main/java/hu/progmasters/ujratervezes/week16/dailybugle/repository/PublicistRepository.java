@@ -87,13 +87,14 @@ public class PublicistRepository {
     }
 
     public boolean savePublicist(PublicistDto data, LocalDateTime now) {
-        String sql = "INSERT INTO publicist (name, address, email, phone, created_at) VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO publicist (name, address, email, phone, status, created_at) VALUES (?, ?, ?, ?, ?, ?);";
         try {
             int rowsAffected = jdbcTemplate.update(sql,
                     data.getName(),
                     data.getAddress(),
                     data.getEmail(),
                     data.getPhone(),
+                    1,
                     now
             );
             return rowsAffected == 1;
