@@ -57,9 +57,9 @@ public class ArticleService {
 
     public boolean saveArticle(ArticleImportPathDto articleImportPathDto) {
         int dC = 1; // deployCounter
+        List<String> lines;
         boolean saveSuccessful = false;
         LocalDateTime deployTime = null;
-        List<String> lines;
         Path path = Path.of(articleImportPathDto.getPath());
 
         try {
@@ -80,7 +80,6 @@ public class ArticleService {
         }
 
         if (lines.size() < 4 + dC) return saveSuccessful;
-
         saveSuccessful = isSaveSuccessful(lines, dC, deployTime);
 
         return saveSuccessful;
@@ -119,7 +118,6 @@ public class ArticleService {
         } else {
             return false;
         }
-
     }
 
     public boolean deleteArticle(int id) {
