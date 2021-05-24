@@ -1,6 +1,7 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Publicist;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.PhonebookDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
 import org.junit.jupiter.api.AfterEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
@@ -24,7 +26,8 @@ class PublicistRepositoryTest {
    
    private PublicistRepository repository;
    
-   private LocalDateTime CREATEDAT = LocalDateTime.of(2021, 12, 13, 10, 11);
+   private final LocalDateTime CREATED_AT = LocalDateTime.of(2021, 11, 13, 10, 11);
+   private final LocalDateTime MODIFIED_AT = LocalDateTime.of(2021, 12, 13, 10, 11);
    
    
    @BeforeEach
@@ -74,7 +77,7 @@ class PublicistRepositoryTest {
    
    @Test
    void savePublicist() {
-      repository.savePublicist(getPublicistDto(), CREATEDAT);
+      repository.savePublicist(getPublicistDto(), CREATED_AT);
       Publicist publicist = repository.getPublicist(1);
    
       assertEquals(1, publicist.getId());
@@ -86,20 +89,45 @@ class PublicistRepositoryTest {
    
    @Test
    void updatePublicist() {
+      putPublicist();
+      repository.updatePublicist(1, getUpdatedPublicistDto(), MODIFIED_AT);
+      Publicist publicist = repository.getPublicist(1);
+   
+      assertEquals(1, publicist.getId());
+      assertEquals("Joe Doe", publicist.getName());
+      assertEquals("London", publicist.getAddress());
+      assertEquals("joe@mail.com", publicist.getEmail());
+      assertEquals("phone doe", publicist.getPhone());
    }
    
    @Test
    void deletePublicist() {
+      putPublicist();
+      repository.deletePublicist(1, MODIFIED_AT);
+      Publicist publicist = getDeletedPublicist(1);
+      
+      assertEquals(1, publicist.getId());
+      assertEquals("Névtelen Szerző", publicist.getName());
+      assertNull(publicist.getAddress());
+      assertNull(publicist.getEmail());
+      assertNull(publicist.getPhone());
    }
    
    @Test
    void getPhonebook() {
+      putPublicist();
+      List<PhonebookDto> phoneBook = repository.getPhonebook();
+   
+      assertEquals(1, phoneBook.size());
+      assertEquals("Joe", phoneBook.get(0).getName());
+      assertEquals("phone", phoneBook.get(0).getPhone());
+   
    }
    
    void putPublicist() {
       String sql = "INSERT INTO publicist(name, address, email, phone, status, created_at, modified_at)" +
               "VALUES(?, ?, ?, ?, ?, ?, ?)";
-      jdbcTemplate.update(sql, "Joe", "Budapest", "joe@mail.com", "phone", 1, CREATEDAT, CREATEDAT);
+      jdbcTemplate.update(sql, "Joe", "Budapest", "joe@mail.com", "phone", 1, CREATED_AT, CREATED_AT);
    }
    
    PublicistDto getPublicistDto() {
@@ -111,4 +139,31 @@ class PublicistRepositoryTest {
       
       return publicistDto;
    }
+   PublicistDto getUpdatedPublicistDto() {
+      PublicistDto publicistDto = new PublicistDto();
+      publicistDto.setName("Joe Doe");
+      publicistDto.setAddress("London");
+      publicistDto.setEmail("joe@mail.com");
+      publicistDto.setPhone("phone doe");
+      
+      return publicistDto;
+   }
+   
+   public Publicist getDeletedPublicist(int id) {
+      String sql = "SELECT * FROM publicist WHERE id = ?";
+      try {
+         return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+            Publicist publicist = new Publicist();
+            publicist.setId(resultSet.getInt("id"));
+            publicist.setName(resultSet.getString("name"));
+            publicist.setAddress(resultSet.getString("address"));
+            publicist.setEmail(resultSet.getString("email"));
+            publicist.setPhone(resultSet.getString("phone"));
+            return publicist;
+         }, id);
+      } catch (EmptyResultDataAccessException e) {
+         return null;
+      }
+   }
+   
 }
