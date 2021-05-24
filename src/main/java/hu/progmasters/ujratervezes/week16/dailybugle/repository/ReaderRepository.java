@@ -86,7 +86,7 @@ public class ReaderRepository {
 
     // minden cikk ID-ja és címe, amit értékelt az olvasó, és az adott értékelés
     private List<ReaderRatedArticleDto> getRatedArticles(int id) {
-        List<ReaderRatedArticleDto> ratedArticles = new ArrayList<>();
+        List<ReaderRatedArticleDto> ratedArticles;
         String sql = "SELECT a.id AS article_id, a.title, r.article_rating " +
                 "FROM article a  " +
                 "LEFT JOIN rating r ON a.id = r.article_id " +
@@ -102,12 +102,13 @@ public class ReaderRepository {
     }
 
     public boolean saveReader(ReaderDto data, LocalDateTime now) {
-        String sql = "INSERT INTO reader (username, email, created_at) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO reader (username, email, created_at, status) VALUES (?, ?, ?, ?)";
         try {
             int rowsAffected = jdbcTemplate.update(sql,
                     data.getUserName(),
                     data.getEmail(),
-                    now
+                    now,
+                    1
             );
             return rowsAffected == 1;
         } catch (DataAccessException e) {
