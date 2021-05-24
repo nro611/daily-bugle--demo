@@ -24,6 +24,8 @@ public class CommentService {
 
 
     public boolean saveComment(CommentDto data, int articleId) {
-        return commentRepository.saveComment(data, articleId, LocalDateTime.now(clock));
+        data.setTime(LocalDateTime.now(clock));
+        data.setArticleId(articleId);
+        return commentRepository.saveComment(data);
     }
 }

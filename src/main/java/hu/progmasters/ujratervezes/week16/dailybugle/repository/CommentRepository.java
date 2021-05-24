@@ -21,15 +21,15 @@ public class CommentRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean saveComment(CommentDto data, int articleId, LocalDateTime now) {
+    public boolean saveComment(CommentDto data) { // this is the old version new query needed
         String sql = "INSERT INTO comment (comment_author, comment_text, article_id, created_at) " +
                 "VALUES (?, ?, ?, ?)";
         try {
             int rowsAffected = jdbcTemplate.update(sql,
                     data.getCommentAuthor(),
                     data.getCommentText(),
-                    articleId,
-                    now
+                    data.getArticleId(),
+                    data.getTime()
             );
             return rowsAffected == 1;
         } catch (DataAccessException e) {

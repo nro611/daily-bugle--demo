@@ -1,11 +1,15 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
+import hu.progmasters.ujratervezes.week16.dailybugle.domain.Comment;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,6 +20,8 @@ class CommentRepositoryTest {
    private JdbcTemplate jdbcTemplate;
    
    private CommentRepository repository;
+   
+   private final LocalDateTime CREATED_AT = LocalDateTime.of(2021, 11, 13, 10, 11);
    
    @BeforeEach
    void setUp() {
@@ -37,7 +43,14 @@ class CommentRepositoryTest {
    
    @Test
    void saveComment() {
-   
+      repository.saveComment(new CommentDto("Joe Doe", "comment", CREATED_AT, 1));
+      String sql = "SELECT * FROM comment";
+      Comment comment = jdbcTemplate.queryForObject(sql, (rs, row) -> {
+         Comment tempComment = new Comment();
+         tempComment.setId(rs.getInt("id"));
+         return tempComment;
+         //TODO - need to modify CommentRepository.saveComment table changed!
+      });
    }
    void createReaderTable() {
       String sql = "CREATE TABLE reader(" +
