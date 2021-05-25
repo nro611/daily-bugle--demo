@@ -102,13 +102,12 @@ public class ReaderRepository {
     }
 
     public boolean saveReader(ReaderDto data, LocalDateTime now) {
-        String sql = "INSERT INTO reader (username, email, created_at, status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO reader (username, email, created_at) VALUES (?, ?, ?)";
         try {
             int rowsAffected = jdbcTemplate.update(sql,
                     data.getUserName(),
                     data.getEmail(),
-                    now,
-                    1
+                    now
             );
             return rowsAffected == 1;
         } catch (DataAccessException e) {
