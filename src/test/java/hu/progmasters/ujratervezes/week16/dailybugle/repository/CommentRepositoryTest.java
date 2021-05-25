@@ -11,8 +11,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @JdbcTest
 class CommentRepositoryTest {
    
@@ -26,8 +24,8 @@ class CommentRepositoryTest {
    @BeforeEach
    void setUp() {
       createReaderTable();
-      createCommentTable();
       createArticleTable();
+      createCommentTable();
       //createRatingTable();
       repository = new CommentRepository(jdbcTemplate);
    }
@@ -54,25 +52,29 @@ class CommentRepositoryTest {
    }
    void createReaderTable() {
       String sql = "CREATE TABLE reader(" +
-              "id int primary key auto_increment," +
-              "username varchar(200)," +
+              "id INT NOT NULL AUTO_INCREMENT," +
+              "username VARCHAR(200)," +
               "email varchar(200)," +
               "created_at datetime," +
               "modified_at datetime," +
-              "status tinyint(1));";
+              "status TINYINT DEFAULT 1, " +
+              "PRIMARY KEY (id));";
       
       jdbcTemplate.execute(sql);
    }
    
    void createCommentTable() {
       String sql = "CREATE TABLE comment(" +
-              "id int primary key auto_increment," +
-              "reader_id int," +
-              "comment_text varchar(200)," +
-              "article_id int," +
-              "created_at datetime," +
-              "modified_at datetime," +
-              "status tinyint(1));";
+              "id INT NOT NULL AUTO_INCREMENT," +
+              "reader_id INT," +
+              "comment_text VARCHAR(200)," +
+              "article_id INT," +
+              "created_at DATETIME," +
+              "modified_at DATETIME," +
+              "status TINYINT DEFAULT 1," +
+              "PRIMARY KEY (id)," +
+              "FOREIGN KEY (reader_id) REFERENCES reader (id)," +
+              "FOREIGN KEY (article_id) REFERENCES article (id));";
       
       jdbcTemplate.execute(sql);
       
@@ -80,11 +82,14 @@ class CommentRepositoryTest {
    
    void createRatingTable() {
       String sql = "CREATE TABLE rating(" +
-              "reader_id int," +
-              "article_id int," +
-              "article_rating tinyint," +
-              "created_at datetime," +
-              "modified_at datetime);";
+              "reader_id INT," +
+              "article_id INT," +
+              "article_rating TINYINT," +
+              "created_at DATETIME," +
+              "modified_at DATETIME " +
+              "FOREIGN KEY (article_id) REFERENCES article (id)," +
+              "FOREIGN KEY (reader_id) REFERENCES reader (id)" +
+              ");";
       
       jdbcTemplate.execute(sql);
       
@@ -92,15 +97,18 @@ class CommentRepositoryTest {
    
    void createArticleTable() {
       String sql = "CREATE TABLE article(" +
-              "id int primary key auto_increment," +
-              "publicist_id int," +
-              "title varchar(200)," +
-              "synopsys varchar(200)," +
-              "text varchar(200)," +
-              "created_at datetime," +
-              "modified_at datetime," +
-              "deployed_at datetime," +
-              "status tinyint(1));";
+              "id INT NOT NULL AUTO_INCREMENT," +
+              "publicist_id INT," +
+              "title VARCHAR(200)," +
+              "synopsys VARCHAR(200)," +
+              "text VARCHAR(200)," +
+              "created_at DATETIME," +
+              "modified_at DATETIME," +
+              "deployed_at DATETIME," +
+              "status TINYINT DEFAULT 1" +
+              "PRIMARY KEY (id)," +
+              "FOREIGN KEY (publicist_id) REFERENCES publicist (id)" +
+              ");";
       
       jdbcTemplate.execute(sql);
       
