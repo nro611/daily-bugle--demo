@@ -16,7 +16,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @JdbcTest
 class PublicistRepositoryTest {
@@ -38,7 +39,7 @@ class PublicistRepositoryTest {
               "address varchar(200)," +
               "email varchar(200)," +
               "phone varchar(30)," +
-              "status tinyint(1)," +
+              "status tinyint DEFAULT 1," +
               "created_at datetime," +
               "modified_at datetime);";
       
@@ -125,9 +126,9 @@ class PublicistRepositoryTest {
    }
    
    void putPublicist() {
-      String sql = "INSERT INTO publicist(name, address, email, phone, status, created_at, modified_at)" +
-              "VALUES(?, ?, ?, ?, ?, ?, ?)";
-      jdbcTemplate.update(sql, "Joe", "Budapest", "joe@mail.com", "phone", 1, CREATED_AT, CREATED_AT);
+      String sql = "INSERT INTO publicist(name, address, email, phone, created_at, modified_at)" +
+              "VALUES(?, ?, ?, ?, ?, ?)";
+      jdbcTemplate.update(sql, "Joe", "Budapest", "joe@mail.com", "phone", CREATED_AT, CREATED_AT);
    }
    
    PublicistDto getPublicistDto() {
