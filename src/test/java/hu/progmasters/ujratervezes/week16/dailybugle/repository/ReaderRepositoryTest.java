@@ -103,7 +103,7 @@ class ReaderRepositoryTest {
               "email varchar(200)," +
               "created_at datetime," +
               "modified_at datetime," +
-              "status tinyint(1));";
+              "status tinyint DEFAULT 1);";
       
       jdbcTemplate.execute(sql);
    }
@@ -116,10 +116,9 @@ class ReaderRepositoryTest {
               "article_id int," +
               "created_at datetime," +
               "modified_at datetime," +
-              "status tinyint(1));";
+              "status tinyint DEFAULT 1);";
       
       jdbcTemplate.execute(sql);
-      
    }
    
    void createRatingTable() {
@@ -131,7 +130,6 @@ class ReaderRepositoryTest {
               "modified_at datetime);";
       
       jdbcTemplate.execute(sql);
-      
    }
    
    void createArticleTable() {
@@ -144,14 +142,31 @@ class ReaderRepositoryTest {
               "created_at datetime," +
               "modified_at datetime," +
               "deployed_at datetime," +
-              "status tinyint(1));";
-      
+              "status tinyint DEFAULT 1);";
+
       jdbcTemplate.execute(sql);
-      
    }
-   
+
+   // TODO valószínűleg kellenének foreign key-k minden táblába a megfelelő tesztelhetőséghez (?),
+   // akkor viszont kell a createPublicistTable() is
+   // (többi createTable itt még a régi verzió csak a statust módosítottam)
+   /*
+   void createPublicistTable() {
+      String sql = "CREATE TABLE publicist(" +
+              "id int primary key auto_increment," +
+              "name varchar(200)," +
+              "address varchar(200)," +
+              "email varchar(200)," +
+              "phone varchar(30)," +
+              "status tinyint DEFAULT 1," +
+              "created_at datetime," +
+              "modified_at datetime);";
+      jdbcTemplate.execute(sql);
+   }
+   */
+
    void putReader() {
-      String sql = "INSERT INTO reader(username, email, created_at, modified_at, status) VALUES(?, ?, ?, ?, ?);";
-      jdbcTemplate.update(sql, "Joe", "joe@mail.com", CREATED_AT, MODIFIED_AT, 1);
+      String sql = "INSERT INTO reader(username, email, created_at, modified_at) VALUES(?, ?, ?, ?);";
+      jdbcTemplate.update(sql, "Joe", "joe@mail.com", CREATED_AT, MODIFIED_AT);
    }
 }
