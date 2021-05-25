@@ -1,10 +1,7 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -131,13 +128,13 @@ public class ArticleRepository {
         }
     }
 
-    public boolean saveArticle(Integer publicist_id, String title, String synopsys, String text, LocalDateTime now) {
+    public boolean saveArticle(ArticleDto data, LocalDateTime now) {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_ARTICLE.getSqlQuery(),
-                    publicist_id,
-                    title,
-                    synopsys,
-                    text,
+                    data.getPublicistId(),
+                    data.getTitle(),
+                    data.getSynopsys(),
+                    data.getText(),
                     now
             );
             return rowsAffected == 1;
@@ -146,13 +143,13 @@ public class ArticleRepository {
         }
     }
 
-    public boolean saveArticleWithDeployTime(Integer publicist_id, String title, String synopsys, String text, LocalDateTime now, LocalDateTime deployTime) {
+    public boolean saveArticleWithDeployTime(ArticleDto data, LocalDateTime now, LocalDateTime deployTime) {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_ARTICLE_DEPLOY.getSqlQuery(),
-                    publicist_id,
-                    title,
-                    synopsys,
-                    text,
+                    data.getPublicistId(),
+                    data.getTitle(),
+                    data.getSynopsys(),
+                    data.getText(),
                     now,
                     deployTime
             );

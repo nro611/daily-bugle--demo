@@ -1,10 +1,7 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleModifyDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.*;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,8 +52,18 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveArticle(@RequestBody ArticleImportPathDto articleImportPathDto) {
-        boolean saveSuccessful = articleService.saveArticle(articleImportPathDto);
+    public ResponseEntity<Void> saveArticle(@RequestBody ArticleDto data) {
+        boolean saveSuccessful = articleService.saveArticle(data);
+        if (saveSuccessful) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<Void> importArticle(@RequestBody ArticleImportPathDto articleImportPathDto) {
+        boolean saveSuccessful = articleService.importArticle(articleImportPathDto);
         if (saveSuccessful) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
