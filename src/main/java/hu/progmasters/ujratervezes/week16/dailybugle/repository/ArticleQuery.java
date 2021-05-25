@@ -115,9 +115,8 @@ public enum ArticleQuery {
             "article_rating = ?, " +
             "modified_at = ? " +
             "WHERE reader_id = ? AND article_id = ?"),
-    GET_COMMENTS_FOR_ARTICLE_ID("SELECT r.username, c.comment_text, c.created_at " +
+    GET_COMMENTS_FOR_ARTICLE_ID("SELECT c.reader_id, c.comment_text, c.created_at " +
             "FROM comment c " +
-            "JOIN reader r ON r.id = c.reader_id " +
             "WHERE c.article_id = ? " +
             "ORDER BY c.created_at DESC");
 

@@ -3,6 +3,7 @@ package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Comment;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ class CommentRepositoryTest {
    
    @BeforeEach
    void setUp() {
+      createPublicistTable();
       createReaderTable();
       createArticleTable();
       createCommentTable();
@@ -36,19 +38,40 @@ class CommentRepositoryTest {
       jdbcTemplate.execute("DROP TABLE IF EXISTS reader;");
       jdbcTemplate.execute("DROP TABLE IF EXISTS comment");
       jdbcTemplate.execute("DROP TABLE IF EXISTS article");
+      jdbcTemplate.execute("DROP TABLE IF EXISTS publicist");
       //jdbcTemplate.execute("DROP TABLE IF EXISTS rating");
    }
    
    @Test
    void saveComment() {
-      repository.saveComment(new CommentDto("Joe Doe", "comment", CREATED_AT, 1));
-      String sql = "SELECT * FROM comment";
+      repository.saveComment(new CommentDto(1, "comment", CREATED_AT, 1));
+      String sql = "SELECT c.id, r.username, c.comment_text, c.article_id FROM comment c " +
+              "JOIN reader r ON c.reader_id = r.id " +
+              "WHERE c.id = ?";
       Comment comment = jdbcTemplate.queryForObject(sql, (rs, row) -> {
          Comment tempComment = new Comment();
-         tempComment.setId(rs.getInt("id"));
+         tempComment.setId(rs.getInt("c.id"));
+         tempComment.setCommentAuthor(rs.getString("r.username"));
+         tempComment.setCommentText(rs.getString("c.comment_text"));
+         tempComment.setArticleId(rs.getInt("c.article_id"));
          return tempComment;
-         //TODO - need to modify CommentRepository.saveComment table changed!
-      });
+      }, 1);
+   
+      Assertions.assertEquals("comment", comment.getCommentText());
+   }
+   
+   void createPublicistTable() {
+      String sql = "CREATE TABLE publicist(" +
+              "id int primary key auto_increment," +
+              "name varchar(200)," +
+              "address varchar(200)," +
+              "email varchar(200)," +
+              "phone varchar(30)," +
+              "status tinyint DEFAULT 1," +
+              "created_at datetime," +
+              "modified_at datetime);";
+      
+      jdbcTemplate.execute(sql);
    }
    void createReaderTable() {
       String sql = "CREATE TABLE reader(" +
@@ -105,7 +128,7 @@ class CommentRepositoryTest {
               "created_at DATETIME," +
               "modified_at DATETIME," +
               "deployed_at DATETIME," +
-              "status TINYINT DEFAULT 1" +
+              "status TINYINT DEFAULT 1," +
               "PRIMARY KEY (id)," +
               "FOREIGN KEY (publicist_id) REFERENCES publicist (id)" +
               ");";

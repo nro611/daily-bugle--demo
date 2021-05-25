@@ -69,7 +69,7 @@ public class ArticleRepository {
     private List<CommentDto> getCommentsForArticle(int id) {
         return jdbcTemplate.query(ArticleQuery.GET_COMMENTS_FOR_ARTICLE_ID.getSqlQuery(), (resultSet, i) -> {
             CommentDto comment = new CommentDto();
-            comment.setCommentAuthor(resultSet.getString("username"));
+            comment.setReaderId(resultSet.getInt("reader_id"));
             comment.setCommentText(resultSet.getString("comment_text"));
             comment.setTime(resultSet.getTimestamp("created_at").toLocalDateTime());
             return comment;

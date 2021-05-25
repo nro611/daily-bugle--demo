@@ -21,12 +21,12 @@ public class CommentRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean saveComment(CommentDto data) { // this is the old version new query needed
-        String sql = "INSERT INTO comment (comment_author, comment_text, article_id, created_at) " +
+    public boolean saveComment(CommentDto data) {
+        String sql = "INSERT INTO comment(reader_id, comment_text, article_id, created_at) " +
                 "VALUES (?, ?, ?, ?)";
         try {
             int rowsAffected = jdbcTemplate.update(sql,
-                    data.getCommentAuthor(),
+                    data.getReaderId(),
                     data.getCommentText(),
                     data.getArticleId(),
                     data.getTime()
