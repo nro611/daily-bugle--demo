@@ -102,9 +102,7 @@ public enum ArticleQuery {
             "modified_at = ? " +
             "WHERE id = ?"),
     // Import article into db
-    SAVE_ARTICLE("INSERT INTO article (publicist_id, title, synopsys, text, created_at) " +
-            "VALUES (?, ?, ?, ?, ?)"),
-    SAVE_ARTICLE_DEPLOY("INSERT INTO article (publicist_id, title, synopsys, text, created_at, deployed_at) " +
+    SAVE_ARTICLE("INSERT INTO article (publicist_id, title, synopsys, text, created_at, deployed_at) " +
             "VALUES (?, ?, ?, ?, ?, ?)"),
     // TODO
     SAVE_KEYWORD(""),

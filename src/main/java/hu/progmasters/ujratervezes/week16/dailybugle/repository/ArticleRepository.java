@@ -135,29 +135,13 @@ public class ArticleRepository {
                     data.getTitle(),
                     data.getSynopsys(),
                     data.getText(),
-                    now
-            );
-            return rowsAffected == 1;
-        } catch (DataAccessException e) {
-            return false;
-        }
-    }
-
-    public boolean saveArticleWithDeployTime(ArticleDto data, LocalDateTime now, LocalDateTime deployTime) {
-        try {
-            int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_ARTICLE_DEPLOY.getSqlQuery(),
-                    data.getPublicistId(),
-                    data.getTitle(),
-                    data.getSynopsys(),
-                    data.getText(),
                     now,
-                    deployTime
+                    data.getDeployTime()
             );
             return rowsAffected == 1;
         } catch (DataAccessException e) {
             return false;
         }
-
     }
 
     @Component

@@ -110,12 +110,11 @@ public class ArticleService {
       articleDto.setTitle(lines.get(deployCounter + 1));
       articleDto.setSynopsys(lines.get(deployCounter + 2));
       articleDto.setText(String.join("\n", lines.subList(deployCounter + 3, lines.size())));
+      articleDto.setDeployTime(deployTime);
 
-      if (deployTime != null) {
-         saveSuccessful = articleRepository.saveArticleWithDeployTime(articleDto, LocalDateTime.now(clock), deployTime);
-      } else {
-         saveSuccessful = articleRepository.saveArticle(articleDto, LocalDateTime.now(clock));
-      }
+
+      saveSuccessful = articleRepository.saveArticle(articleDto, LocalDateTime.now(clock));
+
       return saveSuccessful;
    }
 
