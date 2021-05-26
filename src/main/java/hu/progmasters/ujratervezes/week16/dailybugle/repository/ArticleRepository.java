@@ -1,7 +1,10 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.*;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -105,12 +108,13 @@ public class ArticleRepository {
         }
     }
 
-    public boolean updateArticle(ArticleModifyDto data, int id, LocalDateTime now) {
+    public boolean updateArticle(ArticleDto data, int id, LocalDateTime now) {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.UPDATE_ARTICLE.getSqlQuery(),
                     data.getTitle(),
                     data.getSynopsys(),
                     data.getText(),
+                    data.getDeployTime(),
                     now,
                     id
             );

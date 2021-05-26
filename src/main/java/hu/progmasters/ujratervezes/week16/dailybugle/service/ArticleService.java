@@ -1,7 +1,10 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.service;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.*;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,7 +56,7 @@ public class ArticleService {
         return articleRepository.getArticle(id);
     }
 
-    public boolean updateArticle(ArticleModifyDto data, int id) {
+    public boolean updateArticle(ArticleDto data, int id) {
         return articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
     }
 

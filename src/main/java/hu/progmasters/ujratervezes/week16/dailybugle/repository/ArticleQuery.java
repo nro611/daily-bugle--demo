@@ -94,6 +94,7 @@ public enum ArticleQuery {
             "title = ?, " +
             "synopsys = ?, " +
             "text = ?, " +
+            "deployed_at = ?" +
             "modified_at = ? " +
             "WHERE id = ?"),
     // Update article status to 0 <inactive>

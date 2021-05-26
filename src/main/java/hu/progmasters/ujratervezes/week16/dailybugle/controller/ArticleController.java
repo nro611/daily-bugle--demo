@@ -1,7 +1,10 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.controller;
 
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.*;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,7 +85,7 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateArticle(@RequestBody ArticleModifyDto data, @PathVariable int id) {
+    public ResponseEntity<Void> updateArticle(@RequestBody ArticleDto data, @PathVariable int id) {
         boolean updateSuccessful = articleService.updateArticle(data, id);
         if (updateSuccessful) {
             return new ResponseEntity<>(HttpStatus.OK);
