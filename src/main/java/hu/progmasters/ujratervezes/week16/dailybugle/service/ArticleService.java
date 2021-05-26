@@ -78,14 +78,15 @@ public class ArticleService {
     public boolean saveArticle(ArticleDto data) {
         boolean saveSuccessful = articleRepository.saveArticle(data, LocalDateTime.now(clock));
         if (saveSuccessful && data.getKeywords() != null && data.getKeywords().size() > 0) {
-            saveSuccessful = isKeywordSaveSuccessful(data, saveSuccessful);
+            saveSuccessful = isKeywordSaveSuccessful(data);
         }
         return saveSuccessful;
     }
 
     // article_keyword table FKs set to cascade upon delete/update
     // set article title to unique and remove publicistid param from articleId
-    private boolean isKeywordSaveSuccessful(ArticleDto data, boolean saveSuccessful) {
+    private boolean isKeywordSaveSuccessful(ArticleDto data) {
+        boolean saveSuccessful = true;
         int articleId = articleRepository.getArticleId(data.getTitle());
         List<String> keywordsInDb = articleRepository.getKeywords();
         List<String> keywordsInDto = data.getKeywords()
@@ -146,7 +147,7 @@ public class ArticleService {
         }
 
         if (lines.size() >= 4 + deployCounter) {
-            saveSuccessful = isKeywordSaveSuccessful(lines, deployCounter, deployTime);
+            saveSuccessful = isSaveSuccessful(lines, deployCounter, deployTime);
         }
 
         return saveSuccessful;
@@ -163,7 +164,7 @@ public class ArticleService {
         }
     }
 
-    private boolean isKeywordSaveSuccessful(List<String> lines, int deployCounter, LocalDateTime deployTime) {
+    private boolean isSaveSuccessful(List<String> lines, int deployCounter, LocalDateTime deployTime) {
         boolean saveSuccessful;
         ArticleDto articleDto = new ArticleDto();
         articleDto.setPublicistId(Integer.parseInt(lines.get(deployCounter)));
