@@ -15,6 +15,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,32 +57,72 @@ public class ArticleService {
         return articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
     }
 
+    /**
+     * @param data int publicistId,
+     *             String title,
+     *             String synopsys,
+     *             String text,
+     *             LocalDateTime deployTime,
+     *             List<String> keywords
+     *             <p>
+     *             Saves an article, stores the returning boolean in a variable.
+     *             If saving was successful checks if @param data ahd keywords
+     *             If yes:- Gets article id
+     *             - Gets existing keywords
+     *             - Gets keywords from @param data, converts them to lowercase and only keeps distincts
+     *             - Saves new keywords in db
+     *             - Gets each keyword's (from @param data) id from db
+     *             - Saves keywords and article id in db
+     * @return boolean depending if saving the article and the keywords was successful
+     */
     public boolean saveArticle(ArticleDto data) {
         boolean saveSuccessful = articleRepository.saveArticle(data, LocalDateTime.now(clock));
         if (saveSuccessful && data.getKeywords() != null && data.getKeywords().size() > 0) {
-            List<Integer> keywordIdsToSave = new ArrayList<>();
-            List<String> keywordsInDb = articleRepository.getKeywords();
-            List<String> keywordsInDto = data.getKeywords()
-                    .stream()
-                    .map(String::toLowerCase)
-                    .distinct()
-                    .collect(Collectors.toList());
-
-            keywordsInDto.forEach(keyword -> {
-                if (!keywordsInDb.contains(keyword)) {
-                    articleRepository.saveKeyword(keyword);
-                }
-                keywordIdsToSave.add(articleRepository.getKeywordId(keyword));
-                // TODO Need article id and keyword id to save in article_keyword
-                // List<Integer> keywordIdsToSave new ArrayList()
-                // keywordIdsToSave.add (select id from keyword where keyword_name = ?(keyword))
-                // int articleId = select id from article where article_title = ? AND publicistId = ?; - egyszerűbben?
-                // keywordIdsToSave.forEach(insert into article_keyword(article_id, keyword_id) values (articleId, ?)
-            });
+            saveSuccessful = isKeywordSaveSuccessful(data, saveSuccessful);
         }
-
         return saveSuccessful;
     }
+
+    // article_keyword table FKs set to cascade upon delete/update
+    // set article title to unique and remove publicistid param from articleId
+    private boolean isKeywordSaveSuccessful(ArticleDto data, boolean saveSuccessful) {
+        int articleId = articleRepository.getArticleId(data.getTitle());
+        List<String> keywordsInDb = articleRepository.getKeywords();
+        List<String> keywordsInDto = data.getKeywords()
+                .stream()
+                .map(String::toLowerCase)
+                .distinct()
+                .collect(Collectors.toList());
+
+        for (String keyword : keywordsInDto) {
+            if (!keywordsInDb.contains(keyword)) {
+                if (!articleRepository.saveKeyword(keyword)) {
+                    saveSuccessful = false;
+                }
+            }
+        }
+        List<Integer> keywordIdsToSave = getKeywordIds(keywordsInDto);
+        for (Integer keywordId : keywordIdsToSave) {
+            if (articleId == 0 || !articleRepository.saveArticleKeyword(articleId, keywordId)) {
+                saveSuccessful = false;
+            }
+        }
+        return saveSuccessful;
+    }
+
+
+    /**
+     * @param keywordsInDto list of keywords which ids' are needed
+     *                      inSql creates a String "(?,?,?,?,...)" with as many "?"s as many keywords are in the @param keywordsInDto,
+     *                      seperated with ",". Used in sql query in repository.
+     *                      This way query works with Lists of any size.
+     * @return an Integer list containing the ids for the keywords
+     */
+    private List<Integer> getKeywordIds(List<String> keywordsInDto) {
+        String inSql = String.join(",", Collections.nCopies(keywordsInDto.size(), "?"));
+        return articleRepository.getKeywordIds(inSql, keywordsInDto);
+    }
+
 
     public boolean importArticle(ArticleImportPathDto articleImportPathDto) {
         int deployCounter = 1;
@@ -105,7 +146,7 @@ public class ArticleService {
         }
 
         if (lines.size() >= 4 + deployCounter) {
-            saveSuccessful = isSaveSuccessful(lines, deployCounter, deployTime);
+            saveSuccessful = isKeywordSaveSuccessful(lines, deployCounter, deployTime);
         }
 
         return saveSuccessful;
@@ -122,7 +163,7 @@ public class ArticleService {
         }
     }
 
-    private boolean isSaveSuccessful(List<String> lines, int deployCounter, LocalDateTime deployTime) {
+    private boolean isKeywordSaveSuccessful(List<String> lines, int deployCounter, LocalDateTime deployTime) {
         boolean saveSuccessful;
         ArticleDto articleDto = new ArticleDto();
         articleDto.setPublicistId(Integer.parseInt(lines.get(deployCounter)));

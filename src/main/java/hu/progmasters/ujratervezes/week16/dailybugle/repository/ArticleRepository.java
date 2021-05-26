@@ -74,27 +74,6 @@ public class ArticleRepository {
         }, id);
     }
 
-    // TODO-----------------------------------------------------------_
-
-    public List<String> getKeywords() {
-        try {
-            return jdbcTemplate.queryForList("SELECT keyword_name FROM keyword", String.class);
-        } catch (DataAccessException e) {
-            return new ArrayList<>();
-        }
-    }
-
-
-    public void saveKeyword(String keyword) {
-        jdbcTemplate.update("INSERT INTO keyword (keyword_name) VALUES (?)", keyword);
-    }
-
-    public Integer getKeywordId(String keyword) {
-        String sql = "SELECT id FROM keyword WHERE keyword_name = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, keyword);
-    }
-//-----------------------------------------------------------
-
     public boolean saveRating(int readerId, int articleId, int rating, LocalDateTime now) {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_RATING.getSqlQuery(), readerId, articleId, rating, now);
@@ -160,6 +139,57 @@ public class ArticleRepository {
                     now,
                     data.getDeployTime()
             );
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
+    }
+
+    public List<String> getKeywords() {
+        try {
+            return jdbcTemplate.queryForList("SELECT keyword_name FROM keyword", String.class);
+        } catch (DataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean saveKeyword(String keyword) {
+        try {
+            String sql = "INSERT INTO keyword (keyword_name) VALUES (?)";
+            int rowsAffected = jdbcTemplate.update(sql, keyword);
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
+    }
+
+    public List<Integer> getKeywordIds(String inSql, List<String> keywordsInDto) {
+        List<Integer> keywordIds = new ArrayList<>();
+        try {
+            keywordIds = jdbcTemplate.queryForList(
+                    String.format("SELECT id FROM keyword WHERE keyword_name IN (%s)", inSql),
+                    Integer.class,
+                    keywordsInDto.toArray()
+            );
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return keywordIds;
+    }
+
+    public Integer getArticleId(String title) {
+        String sql = "SELECT id FROM article WHERE title = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, Integer.class, title);
+        } catch (DataAccessException e) {
+            return 0;
+        }
+    }
+
+    public boolean saveArticleKeyword(int articleId, int keywordId) {
+        String sql = "INSERT INTO article_keyword (article_id, keyword_id) VALUES (?,?)";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, articleId, keywordId);
             return rowsAffected == 1;
         } catch (DataAccessException e) {
             return false;
