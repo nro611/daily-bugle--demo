@@ -104,9 +104,12 @@ public enum ArticleQuery {
     // Import article into db
     SAVE_ARTICLE("INSERT INTO article (publicist_id, title, synopsys, text, created_at, deployed_at) " +
             "VALUES (?, ?, ?, ?, ?, ?)"),
-    // TODO
+    // TODO------------------------
+    // insert keyword into keyword
     SAVE_KEYWORD(""),
+    // insert article_id, keyword_id into article_keyword
     SAVE_ARTICLE_KEYWORD(""),
+    //------------------------------
     GET_RATING_USER_ARTICLE("SELECT reader_id, article_rating " +
             "FROM rating " +
             "WHERE reader_id = ? AND article_id = ?"),

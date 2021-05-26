@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -72,6 +73,27 @@ public class ArticleRepository {
             return comment;
         }, id);
     }
+
+    // TODO-----------------------------------------------------------
+
+    public List<String> getKeywords() {
+        try {
+            return jdbcTemplate.queryForList("SELECT keyword_name FROM keyword", String.class);
+        } catch (DataAccessException e) {
+            return new ArrayList<>();
+        }
+    }
+
+
+    public void saveKeyword(String keyword) {
+        jdbcTemplate.update("INSERT INTO keyword (keyword_name) VALUES (?)", keyword);
+    }
+
+    public Integer getKeywordId(String keyword) {
+        String sql = "SELECT id FROM keyword WHERE keyword_name = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, keyword);
+    }
+//-----------------------------------------------------------
 
     public boolean saveRating(int readerId, int articleId, int rating, LocalDateTime now) {
         try {

@@ -16,5 +16,5 @@ public class ArticleDto {
     private String synopsys;
     private String text;
     private LocalDateTime deployTime;
-    private List<String> keyWords;
+    private List<String> keywords;
 }
