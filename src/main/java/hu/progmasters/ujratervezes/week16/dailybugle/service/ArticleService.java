@@ -58,21 +58,28 @@ public class ArticleService {
     }
 
     /**
+     * Saves an article, stores the returning boolean in a variable.
+     * <p>
+     * If saving was successful checks if @param data has keywords. If yes:
+     * <p>
+     * - Gets article id
+     * <p>
+     * - Gets existing keywords
+     * <p>
+     * - Gets keywords from @param data, converts them to lowercase and only keeps distincts
+     * <p>
+     * - Saves new keywords in db
+     * <p>
+     * - Gets each keyword's (from @param data) id from db
+     * <p>
+     * - Saves keywords and article id in db
+     *
      * @param data int publicistId,
      *             String title,
      *             String synopsys,
      *             String text,
      *             LocalDateTime deployTime,
      *             List<String> keywords
-     *             <p>
-     *             Saves an article, stores the returning boolean in a variable.
-     *             If saving was successful checks if @param data ahd keywords
-     *             If yes:- Gets article id
-     *             - Gets existing keywords
-     *             - Gets keywords from @param data, converts them to lowercase and only keeps distincts
-     *             - Saves new keywords in db
-     *             - Gets each keyword's (from @param data) id from db
-     *             - Saves keywords and article id in db
      * @return boolean depending if saving the article and the keywords was successful
      */
     public boolean saveArticle(ArticleDto data) {
@@ -113,10 +120,10 @@ public class ArticleService {
 
 
     /**
-     * @param keywordsInDto list of keywords which ids' are needed
-     *                      inSql creates a String "(?,?,?,?,...)" with as many "?"s as many keywords are in the @param keywordsInDto,
+     * inSql creates a String "(?,?,?,?,...)" with as many "?"s as many keywords are in the @param keywordsInDto,
      *                      seperated with ",". Used in sql query in repository.
      *                      This way query works with Lists of any size.
+     * @param keywordsInDto list of keywords which ids' are needed
      * @return an Integer list containing the ids for the keywords
      */
     private List<Integer> getKeywordIds(List<String> keywordsInDto) {
