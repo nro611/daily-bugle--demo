@@ -200,6 +200,19 @@ public class ArticleRepository {
         }
     }
 
+    public List<String> getKeywordsForArticle(int id) {
+        // TODO
+        return null;
+    }
+
+    public void removeKeywords(int id) {
+        // TODO
+    }
+
+    public void removeKeyword(String keyword) {
+        // TODO
+    }
+
     @Component
     private static class ArticleListMapper implements RowMapper<ArticleListDto> {
 

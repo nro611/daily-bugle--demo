@@ -57,7 +57,27 @@ public class ArticleService {
     }
 
     public boolean updateArticle(ArticleDto data, int id) {
-        return articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
+        boolean updateSuccessful = articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
+        if (!updateSuccessful) return false;
+
+        List<String> prevKeywords = articleRepository.getKeywordsForArticle(id);
+        List<String> newKeywords = data.getKeywords();
+        List<String> keywordsToSave = new ArrayList<>();
+
+        if (newKeywords == null || newKeywords.size() == 0) {
+            articleRepository.removeKeywords(id);
+        } else {
+            newKeywords.forEach(keyword -> {
+                if (!prevKeywords.contains(keyword)) {
+                    keywordsToSave.add(keyword);
+                } else {
+                    prevKeywords.remove(keyword);
+                }
+            });
+            prevKeywords.forEach(articleRepository::removeKeyword);
+            updateSuccessful = isKeywordSaveSuccessful(keywordsToSave, id);
+        }
+        return updateSuccessful;
     }
 
     /**
@@ -69,7 +89,7 @@ public class ArticleService {
      * <p>
      * - Gets existing keywords
      * <p>
-     * - Gets keywords from @param data, converts them to lowercase and only keeps distincts
+     * - Gets keywords from @param data, converts them to lowercase and only keeps unique
      * <p>
      * - Saves new keywords in db
      * <p>
@@ -88,18 +108,17 @@ public class ArticleService {
     public boolean saveArticle(ArticleDto data) {
         boolean saveSuccessful = articleRepository.saveArticle(data, LocalDateTime.now(clock));
         if (saveSuccessful && data.getKeywords() != null && data.getKeywords().size() > 0) {
-            saveSuccessful = isKeywordSaveSuccessful(data);
+            saveSuccessful = isKeywordSaveSuccessful(data.getKeywords(), articleRepository.getArticleId(data.getTitle()));
         }
         return saveSuccessful;
     }
 
     // article_keyword table FKs set to cascade upon delete/update
     // set article title to unique and remove publicistid param from articleId
-    private boolean isKeywordSaveSuccessful(ArticleDto data) {
+    private boolean isKeywordSaveSuccessful(List<String> keywords, int articleId) {
         boolean saveSuccessful = true;
-        int articleId = articleRepository.getArticleId(data.getTitle());
         List<String> keywordsInDb = articleRepository.getKeywords();
-        List<String> keywordsInDto = data.getKeywords()
+        List<String> keywordsInDto = keywords
                 .stream()
                 .map(String::toLowerCase)
                 .distinct()
@@ -124,8 +143,9 @@ public class ArticleService {
 
     /**
      * inSql creates a String "(?,?,?,?,...)" with as many "?"s as many keywords are in the @param keywordsInDto,
-     *                      seperated with ",". Used in sql query in repository.
-     *                      This way query works with Lists of any size.
+     * seperated with ",". Used in sql query in repository.
+     * This way query works with Lists of any size.
+     *
      * @param keywordsInDto list of keywords which ids' are needed
      * @return an Integer list containing the ids for the keywords
      */
