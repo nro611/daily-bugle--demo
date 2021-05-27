@@ -81,20 +81,13 @@ public class ArticleService {
     }
 
     /**
-     * Saves an article, stores the returning boolean in a variable.
-     * <p>
-     * If saving was successful checks if @param data has keywords. If yes:
-     * <p>
-     * - Gets article id
-     * <p>
-     * - Gets existing keywords
-     * <p>
-     * - Gets keywords from @param data, converts them to lowercase and only keeps unique
-     * <p>
-     * - Saves new keywords in db
-     * <p>
-     * - Gets each keyword's (from @param data) id from db
-     * <p>
+     * Saves an article, stores the returning boolean in a variable. <p>
+     * If saving was successful checks if @param data has keywords. If yes:  <p>
+     * - Gets article id  <p>
+     * - Gets existing keywords  <p>
+     * - Gets keywords from @param data, converts them to lowercase and only keeps unique  <p>
+     * - Saves new keywords in db  <p>
+     * - Gets each keyword's (from @param data) id from db  <p>
      * - Saves keywords and article id in db
      *
      * @param data int publicistId,
@@ -155,17 +148,23 @@ public class ArticleService {
     }
 
 
+    /**
+     * Checks if the 0th index of the List (first line of the text file) is a String that can be parsed
+     * as a LocalDateTime <p>
+     * Said String should appear in the following format: <p>
+     * YYYY-MM-DDThh:mm:ss <p>
+     * e.g: 2007-12-03T10:15:30
+     *
+     * @param articleImportPathDto contains the path to the import file on the local computer
+     * @return true or false depending on the success of the import and save
+     */
     public boolean importArticle(ArticleImportPathDto articleImportPathDto) {
         int deployCounter = 1;
         List<String> lines = new ArrayList<>();
         boolean saveSuccessful = false;
         LocalDateTime deployTime = null;
 
-        // Checks if the 0th index of the List (first line of the text file) is a String that can be parsed
-        // as a LocalDateTime
-        // Said String should appear in the following format:
-        // YYYY-MM-DDThh:mm:ss
-        // e.g: 2007-12-03T10:15:30
+
         try {
             Path path = Path.of(articleImportPathDto.getPath());
             lines = Files.readAllLines(path);
