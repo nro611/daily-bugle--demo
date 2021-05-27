@@ -200,13 +200,21 @@ public class ArticleRepository {
         }
     }
 
-    public List<String> getKeywordsForArticle(int id) {
-        // TODO
-        return null;
+    public List<String> getKeywordsForArticle(int article_id) {
+        try {
+            return jdbcTemplate.queryForList(
+                    ArticleQuery.GET_KEYWORDS_FOR_ARTICE_ID.getSqlQuery(),
+                    String.class,
+                    article_id
+            );
+        } catch (DataAccessException e) {
+            return new ArrayList<>();
+        }
     }
 
     public void removeKeywords(int id) {
-        // TODO
+        // TODO delete with join?
+        String sql = "DELETE from keyword k.......";
     }
 
     public void removeKeyword(String keyword) {

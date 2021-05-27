@@ -118,7 +118,11 @@ public enum ArticleQuery {
             "FROM comment c " +
             "JOIN reader r ON r.id = c.reader_id " +
             "WHERE c.article_id = ? " +
-            "ORDER BY c.created_at DESC");
+            "ORDER BY c.created_at DESC"),
+    GET_KEYWORDS_FOR_ARTICE_ID("SELECT k.keyword_name FROM keyword k " +
+            "JOIN article_keyword ak ON ak.keyword_id = k.id " +
+            "WHERE ak.article_id = ? " +
+            "ORDER BY k.keyword_name ASC");
 
     private final String sqlQuery;
 
