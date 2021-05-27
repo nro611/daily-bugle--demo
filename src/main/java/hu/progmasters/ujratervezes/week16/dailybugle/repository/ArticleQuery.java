@@ -122,7 +122,10 @@ public enum ArticleQuery {
     GET_KEYWORDS_FOR_ARTICE_ID("SELECT k.keyword_name FROM keyword k " +
             "JOIN article_keyword ak ON ak.keyword_id = k.id " +
             "WHERE ak.article_id = ? " +
-            "ORDER BY k.keyword_name ASC");
+            "ORDER BY k.keyword_name ASC"),
+    DELETE_KEYWORDS_ARTICLEID("DELETE keyword FROM keyword " +
+            "JOIN article_keyword ak ON ak.keyword_id = keyword.id " +
+            "WHERE article_id = ?");
 
     private final String sqlQuery;
 

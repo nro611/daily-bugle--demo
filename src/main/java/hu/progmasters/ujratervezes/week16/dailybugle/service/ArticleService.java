@@ -56,6 +56,8 @@ public class ArticleService {
         return articleRepository.getArticle(id);
     }
 
+    // article_keyword table FKs need to be set to CASCADE ON DELETE!
+    // TODO NOT WORKING RIGHT NOW - NEEDS FIX - GETTING BAD REQUEST
     public boolean updateArticle(ArticleDto data, int id) {
         boolean updateSuccessful = articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
         if (!updateSuccessful) return false;
@@ -65,7 +67,9 @@ public class ArticleService {
         List<String> keywordsToSave = new ArrayList<>();
 
         if (newKeywords == null || newKeywords.size() == 0) {
-            articleRepository.removeKeywords(id);
+            if (!articleRepository.removeKeywords(id, prevKeywords.size())) {
+                return false;
+            }
         } else {
             newKeywords.forEach(keyword -> {
                 if (!prevKeywords.contains(keyword)) {
@@ -74,7 +78,11 @@ public class ArticleService {
                     prevKeywords.remove(keyword);
                 }
             });
-            prevKeywords.forEach(articleRepository::removeKeyword);
+            for (String keyword : prevKeywords) {
+                if (!articleRepository.removeKeyword(keyword)) {
+                    return false;
+                }
+            }
             updateSuccessful = isKeywordSaveSuccessful(keywordsToSave, id);
         }
         return updateSuccessful;

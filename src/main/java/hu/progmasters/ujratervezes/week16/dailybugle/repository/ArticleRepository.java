@@ -212,13 +212,23 @@ public class ArticleRepository {
         }
     }
 
-    public void removeKeywords(int id) {
-        // TODO delete with join?
-        String sql = "DELETE from keyword k.......";
+    public boolean removeKeywords(int id, int numberToBeRemoved) {
+        try {
+            int rowsAffected = jdbcTemplate.update(ArticleQuery.DELETE_KEYWORDS_ARTICLEID.getSqlQuery(), id);
+            return rowsAffected == numberToBeRemoved;
+        } catch (DataAccessException e) {
+            return false;
+        }
     }
 
-    public void removeKeyword(String keyword) {
-        // TODO
+    public boolean removeKeyword(String keyword) {
+        String sql = "DELETE FROM keyword WHERE keyword_name = ?";
+        try {
+            int rowsAffected = jdbcTemplate.update(sql, keyword);
+            return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
     }
 
     @Component
