@@ -57,7 +57,6 @@ public class ArticleService {
     }
 
     // article_keyword table FKs need to be set to CASCADE ON DELETE!
-    // TODO NOT WORKING RIGHT NOW - NEEDS FIX - GETTING BAD REQUEST
     public boolean updateArticle(ArticleDto data, int id) {
         boolean updateSuccessful = articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
         if (!updateSuccessful) return false;
