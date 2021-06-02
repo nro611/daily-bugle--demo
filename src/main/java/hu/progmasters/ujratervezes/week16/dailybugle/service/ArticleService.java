@@ -79,9 +79,7 @@ public class ArticleService {
 
         // TODO
         if (newKeywords == null || newKeywords.size() == 0) {
-            if (!articleRepository.removeKeywords(id, prevKeywords.size())) {
-                return false;
-            }
+            if (removeKeywords(id, prevKeywords)) return false;
         } else {
             newKeywords.forEach(keyword -> {
                 if (!prevKeywords.contains(keyword)) {
@@ -90,25 +88,30 @@ public class ArticleService {
                     prevKeywords.remove(keyword);
                 }
             });
-
-            List<Integer> keywordIdsToRemove;
-            if (prevKeywords.size() > 0) {
-                keywordIdsToRemove = getKeywordIds(prevKeywords);
-                String inSql = String.join(",", Collections.nCopies(keywordIdsToRemove.size(), "?"));
-                if (!articleRepository.removeArticleKeywords(id, inSql, keywordIdsToRemove)) {
-                    return false;
-                }
-                for (Integer keywordId : keywordIdsToRemove) {
-                    if (!articleRepository.containsKeyword(keywordId)) {
-                        if (!articleRepository.removeKeyword(keywordId)) {
-                            return false;
-                        }
-                    }
-                }
-            }
+            if (removeKeywords(id, prevKeywords)) return false;
             updateSuccessful = isKeywordSaveSuccessful(keywordsToSave, id);
         }
         return updateSuccessful;
+    }
+
+
+    private boolean removeKeywords(int id, List<String> prevKeywords) {
+        List<Integer> keywordIdsToRemove;
+        if (prevKeywords != null && prevKeywords.size() > 0) {
+            keywordIdsToRemove = getKeywordIds(prevKeywords);
+            String inSql = String.join(",", Collections.nCopies(keywordIdsToRemove.size(), "?"));
+            if (!articleRepository.removeArticleKeywords(id, inSql, keywordIdsToRemove)) {
+                return true;
+            }
+            for (Integer keywordId : keywordIdsToRemove) {
+                if (!articleRepository.containsKeyword(keywordId)) {
+                    if (!articleRepository.removeKeyword(keywordId)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
