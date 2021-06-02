@@ -138,8 +138,8 @@ public class InitTables implements CommandLineRunner {
                 "  `keyword_id` int DEFAULT NULL," +
                 "  KEY `keyword key_idx` (`keyword_id`)," +
                 "  KEY `article key` (`article_id`)," +
-                "  CONSTRAINT `article key` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`)," +
-                "  CONSTRAINT `keyword key` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`)" +
+                "  CONSTRAINT `article key` FOREIGN KEY (`article_id`) REFERENCES `article` (`id`) ON DELETE CASCADE," +
+                "  CONSTRAINT `keyword key` FOREIGN KEY (`keyword_id`) REFERENCES `keyword` (`id`) ON DELETE CASCADE" +
                 ");";
         jdbcTemplate.execute(sql);
     }
