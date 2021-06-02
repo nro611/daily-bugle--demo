@@ -61,9 +61,16 @@ public class PublicistRepository {
         List<ArticleListDto> articles = new ArrayList<>();
         String sql = "SELECT a.id, p.name, a.title, a.synopsys, " +
                 "IFNULL(CAST(AVG(r.article_rating) AS DECIMAL(10,2)),0.00) AS avg_rating," +
-                "IFNULL(COUNT(r.article_rating),0) AS number_of_ratings " +
+                "IFNULL(COUNT(r.article_rating),0) AS number_of_ratings, " +
+                "IFNULL(c.CommentCount,0) AS number_of_comments " +
                 "FROM article a " +
                 "JOIN publicist p ON p.id = a.publicist_id " +
+                "LEFT JOIN (" +
+                "  SELECT comment.article_id, COUNT(*) as CommentCount " +
+                "  FROM comment " +
+                "  WHERE comment.status = 1 " +
+                "  GROUP BY article_id " +
+                ") c ON a.id = c.article_id " +
                 "LEFT JOIN rating r ON r.article_id = a.id " +
                 "WHERE p.id = ? AND a.status = 1 AND (a.deployed_at <= CURRENT_TIMESTAMP OR a.deployed_at IS NULL)" +
                 "GROUP BY a.id " +
@@ -77,6 +84,7 @@ public class PublicistRepository {
                 article.setSynopsys(resultSet.getString("synopsys"));
                 article.setAvgRating(resultSet.getDouble("avg_rating"));
                 article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
+                article.setNumOfComments(resultSet.getInt("number_of_comments"));
                 return article;
             }, id);
         } catch (DataAccessException e) {
