@@ -77,6 +77,7 @@ public class ArticleService {
         List<String> newKeywords = data.getKeywords();
         List<String> keywordsToSave = new ArrayList<>();
 
+        // TODO
         if (newKeywords == null || newKeywords.size() == 0) {
             if (!articleRepository.removeKeywords(id, prevKeywords.size())) {
                 return false;
@@ -89,9 +90,20 @@ public class ArticleService {
                     prevKeywords.remove(keyword);
                 }
             });
-            for (String keyword : prevKeywords) {
-                if (!articleRepository.removeKeyword(keyword)) {
+
+            List<Integer> keywordIdsToRemove;
+            if (prevKeywords.size() > 0) {
+                keywordIdsToRemove = getKeywordIds(prevKeywords);
+                String inSql = String.join(",", Collections.nCopies(keywordIdsToRemove.size(), "?"));
+                if (!articleRepository.removeArticleKeywords(id, inSql, keywordIdsToRemove)) {
                     return false;
+                }
+                for (Integer keywordId : keywordIdsToRemove) {
+                    if (!articleRepository.containsKeyword(keywordId)) {
+                        if (!articleRepository.removeKeyword(keywordId)) {
+                            return false;
+                        }
+                    }
                 }
             }
             updateSuccessful = isKeywordSaveSuccessful(keywordsToSave, id);
@@ -125,8 +137,6 @@ public class ArticleService {
         return saveSuccessful;
     }
 
-    // article_keyword table FKs set to cascade upon delete/update
-    // set article title to unique and remove publicistid param from articleId
     private boolean isKeywordSaveSuccessful(List<String> keywords, int articleId) {
         boolean saveSuccessful = true;
         List<String> keywordsInDb = articleRepository.getKeywords();
@@ -245,3 +255,4 @@ public class ArticleService {
     }
 
 }
+

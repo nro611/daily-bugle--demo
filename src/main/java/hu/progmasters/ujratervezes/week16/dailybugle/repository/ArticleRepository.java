@@ -221,11 +221,35 @@ public class ArticleRepository {
         }
     }
 
-    public boolean removeKeyword(String keyword) {
-        String sql = "DELETE FROM keyword WHERE keyword_name = ?";
+    public boolean removeKeyword(int keyword) {
+        String sql = "DELETE FROM keyword WHERE id = ?";
         try {
             int rowsAffected = jdbcTemplate.update(sql, keyword);
             return rowsAffected == 1;
+        } catch (DataAccessException e) {
+            return false;
+        }
+    }
+
+    public boolean removeArticleKeywords(int articleId, String inSql, List<Integer> idsToRemove) {
+        try {
+            idsToRemove.add(0, articleId);
+            int rowsaffected = jdbcTemplate.update(
+                    String.format("DELETE FROM article_keyword WHERE article_id = ? AND keyword_id IN (%s)", inSql),
+                    idsToRemove.toArray()
+            );
+            return rowsaffected == idsToRemove.size() - 1;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean containsKeyword(Integer keywordId) {
+        String sql = "SELECT article_id FROM article_keyword WHERE keyword_id = ? LIMIT 1";
+        try {
+            Integer articleId = jdbcTemplate.queryForObject(sql, Integer.class, keywordId);
+            return articleId != null;
         } catch (DataAccessException e) {
             return false;
         }
