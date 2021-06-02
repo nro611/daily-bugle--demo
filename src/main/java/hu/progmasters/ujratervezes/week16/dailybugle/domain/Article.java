@@ -1,6 +1,6 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.domain;
 
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentWithoutIdDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,5 +19,5 @@ public class Article {
     private String text;
     private double avgRating;
     private int numOfRatings;
-    private List<CommentDto> comments;
+    private List<CommentWithoutIdDto> comments;
 }

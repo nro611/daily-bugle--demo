@@ -4,7 +4,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentWithoutIdDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,6 +59,8 @@ public class ArticleRepository {
                 article.setText(resultSet.getString("text"));
                 article.setAvgRating(resultSet.getDouble("avg_rating"));
                 article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
+                article.setAvgRating(resultSet.getDouble("avg_rating"));
+                article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
                 article.setComments(getCommentsForArticle(id));
                 return article;
             }, id);
@@ -67,9 +69,9 @@ public class ArticleRepository {
         }
     }
 
-    private List<CommentDto> getCommentsForArticle(int id) {
+    private List<CommentWithoutIdDto> getCommentsForArticle(int id) {
         return jdbcTemplate.query(ArticleQuery.GET_COMMENTS_FOR_ARTICLE_ID.getSqlQuery(), (resultSet, i) -> {
-            CommentDto comment = new CommentDto();
+            CommentWithoutIdDto comment = new CommentWithoutIdDto();
             comment.setCommentAuthor(resultSet.getString("username"));
             comment.setCommentText(resultSet.getString("comment_text"));
             comment.setTime(resultSet.getTimestamp("created_at").toLocalDateTime());
