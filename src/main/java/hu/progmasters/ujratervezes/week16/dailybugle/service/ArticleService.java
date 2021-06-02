@@ -56,6 +56,18 @@ public class ArticleService {
         return articleRepository.getArticle(id);
     }
 
+    /**
+     * @param data (int publicistId,
+     *             String title,
+     *             String synopsys,
+     *             String text,
+     *             LocalDateTime deployTime,
+     *             List<String> keywords)
+     * @param id   article id
+     * @return false if
+     * updating article or removing previous keywords or adding the new keywords fails <p>
+     * true if updating article and it's keywords is successful
+     */
     // article_keyword table FKs need to be set to CASCADE ON DELETE!
     public boolean updateArticle(ArticleDto data, int id) {
         boolean updateSuccessful = articleRepository.updateArticle(data, id, LocalDateTime.now(clock));
@@ -97,12 +109,12 @@ public class ArticleService {
      * - Gets each keyword's (from @param data) id from db  <p>
      * - Saves keywords and article id in db
      *
-     * @param data int publicistId,
+     * @param data (int publicistId,
      *             String title,
      *             String synopsys,
      *             String text,
      *             LocalDateTime deployTime,
-     *             List<String> keywords
+     *             List<String> keywords)
      * @return boolean depending if saving the article and the keywords was successful
      */
     public boolean saveArticle(ArticleDto data) {
