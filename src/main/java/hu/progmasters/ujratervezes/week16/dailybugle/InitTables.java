@@ -177,11 +177,11 @@ public class InitTables implements CommandLineRunner {
                 "('3', '2020', 'Positive outlooks', 'This year is gonna be the greatest believe me. That chinese thing will blow over in a week!', '2020-01-02')," +
                 "('4', 'Long cats', 'Why I like them', 'I like long cats because sometimes when you lift them they are still on the ground!', '2000-05-07')," +
                 "('4', 'Leap years', 'Usually this does not happen', 'Only every fourth year. Ha! ', '2004-02-29')," +
-                "('4', 'Cosmos', 'Why chocolate is dark', 'It is pretty obvious, everything is originated from space, so is chocolate. Space is dark. Bamm!', '2003-10-30')," +
+                "('4', 'Cosmos', 'Why chocolate is dark', 'It is pretty obvious, everything is originated from space, so is chocolate. Space is dark. Bamm!', '2021-06-01')," +
                 "('4', 'Christmas', 'A tale for little ones', 'Santa is running everywhere really fast. Drops a cookie and cries. Then runs some more. FIN', '2007-12-24')," +
-                "('5', 'Life story part 1', 'First part of my long life story', 'I was born as a baby when I was young. I am 30 now. To be continued..', '2021-01-03')," +
-                "('6', 'Washing machines', 'How to clean them', 'Maybe use a washing-machine-washing machine, I have no idea, I never wash. Wait you should??', '2020-03-24')," +
-                "('6', 'Washing machines 2', 'Why I bought one', 'Since you HAVE to wash your clothes from time to time I was forced to buy one:(.', '2021-07-11');";
+                "('5', 'Life story part 1', 'First part of my long life story', 'I was born as a baby when I was young. I am 30 now. To be continued..', '2021-05-30')," +
+                "('6', 'Washing machines', 'How to clean them', 'Maybe use a washing-machine-washing machine, I have no idea, I never wash. Wait you should??', '2021-06-01')," +
+                "('6', 'Washing machines 2', 'Why I bought one', 'Since you HAVE to wash your clothes from time to time I was forced to buy one:(.', '2021-06-02');";
         jdbcTemplate.execute(sql);
 
     }
