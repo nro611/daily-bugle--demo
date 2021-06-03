@@ -21,7 +21,7 @@ public class CommentRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public boolean saveComment(CommentDto data) { // this is the old version new query needed
+    public boolean saveComment(CommentDto data) {
         String sql = "INSERT INTO comment (reader_id, comment_text, article_id, created_at) " +
                 "VALUES (?, ?, ?, ?)";
         try {

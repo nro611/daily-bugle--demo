@@ -1,33 +1,20 @@
-package hu.progmasters.ujratervezes.week16.dailybugle;
+package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
-//@SpringBootApplication
-public class InitTables implements CommandLineRunner {
+@Component
+public class DummyData {
    
-   private final JdbcTemplate jdbcTemplate;
-   private final CreateTables createTables;
+   private JdbcTemplate jdbcTemplate;
    
    @Autowired
-   public InitTables(JdbcTemplate jdbcTemplate, CreateTables createTables) {
+   public DummyData(JdbcTemplate jdbcTemplate) {
       this.jdbcTemplate = jdbcTemplate;
-      this.createTables = createTables;
    }
    
-   public static void main(String[] args) {
-      SpringApplication.run(InitTables.class);
-   }
-   
-   @Override
-   public void run(String... args) {
-      createTables.createAllTables();
-      fillTablesWithDummyData();
-   }
-   
-   private void fillTablesWithDummyData() {
+   public void fillTablesWithDummyData() {
       fillPublicistWithDummyData();
       fillArticleWithDummyData();
       fillReaderWithDummyData();

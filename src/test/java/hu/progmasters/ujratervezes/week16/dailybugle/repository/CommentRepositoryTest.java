@@ -1,8 +1,10 @@
 package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
+import hu.progmasters.ujratervezes.week16.dailybugle.CreateTables;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Comment;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,15 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @JdbcTest
 class CommentRepositoryTest {
    
    @Autowired
    private JdbcTemplate jdbcTemplate;
+   private CreateTables createTables;
+   private DummyData dummyData;
    
    private CommentRepository repository;
    
@@ -23,95 +29,37 @@ class CommentRepositoryTest {
    
    @BeforeEach
    void setUp() {
-      createReaderTable();
-      createArticleTable();
-      createCommentTable();
-      //createRatingTable();
+      
+      // This should work with @Autowired
+      dummyData = new DummyData(jdbcTemplate);
+      createTables = new CreateTables(jdbcTemplate);
+      createTables.createAllTables();
+      dummyData.fillTablesWithDummyData();
       repository = new CommentRepository(jdbcTemplate);
    }
    
    
    @AfterEach
    void tearDown() {
-      jdbcTemplate.execute("DROP TABLE IF EXISTS reader;");
-      jdbcTemplate.execute("DROP TABLE IF EXISTS comment");
-      jdbcTemplate.execute("DROP TABLE IF EXISTS article");
-      //jdbcTemplate.execute("DROP TABLE IF EXISTS rating");
+      createTables.dropTables();
    }
    
    @Test
    void saveComment() {
-      repository.saveComment(new CommentDto(1, "comment", 1, CREATED_AT));
-      String sql = "SELECT * FROM comment";
+      repository.saveComment(new CommentDto(4, "comment", 2, CREATED_AT));
+      String sql = "SELECT * FROM comment WHERE reader_id=4 AND article_id=2";
       Comment comment = jdbcTemplate.queryForObject(sql, (rs, row) -> {
          Comment tempComment = new Comment();
          tempComment.setId(rs.getInt("id"));
+         tempComment.setCommentText(rs.getString("comment_text"));
          return tempComment;
-         //TODO - need to modify CommentRepository.saveComment table changed!
       });
-   }
-   void createReaderTable() {
-      String sql = "CREATE TABLE reader(" +
-              "id INT NOT NULL AUTO_INCREMENT," +
-              "username VARCHAR(200)," +
-              "email varchar(200)," +
-              "created_at datetime," +
-              "modified_at datetime," +
-              "status TINYINT DEFAULT 1, " +
-              "PRIMARY KEY (id));";
-      
-      jdbcTemplate.execute(sql);
+      assertEquals("comment", comment.getCommentText());
    }
    
-   void createCommentTable() {
-      String sql = "CREATE TABLE comment(" +
-              "id INT NOT NULL AUTO_INCREMENT," +
-              "reader_id INT," +
-              "comment_text VARCHAR(200)," +
-              "article_id INT," +
-              "created_at DATETIME," +
-              "modified_at DATETIME," +
-              "status TINYINT DEFAULT 1," +
-              "PRIMARY KEY (id)," +
-              "FOREIGN KEY (reader_id) REFERENCES reader (id)," +
-              "FOREIGN KEY (article_id) REFERENCES article (id));";
-      
-      jdbcTemplate.execute(sql);
-      
-   }
-   
-   void createRatingTable() {
-      String sql = "CREATE TABLE rating(" +
-              "reader_id INT," +
-              "article_id INT," +
-              "article_rating TINYINT," +
-              "created_at DATETIME," +
-              "modified_at DATETIME " +
-              "FOREIGN KEY (article_id) REFERENCES article (id)," +
-              "FOREIGN KEY (reader_id) REFERENCES reader (id)" +
-              ");";
-      
-      jdbcTemplate.execute(sql);
-      
-   }
-   
-   void createArticleTable() {
-      String sql = "CREATE TABLE article(" +
-              "id INT NOT NULL AUTO_INCREMENT," +
-              "publicist_id INT," +
-              "title VARCHAR(200)," +
-              "synopsys VARCHAR(200)," +
-              "text VARCHAR(200)," +
-              "created_at DATETIME," +
-              "modified_at DATETIME," +
-              "deployed_at DATETIME," +
-              "status TINYINT DEFAULT 1" +
-              "PRIMARY KEY (id)," +
-              "FOREIGN KEY (publicist_id) REFERENCES publicist (id)" +
-              ");";
-      
-      jdbcTemplate.execute(sql);
-      
+   @Test
+   void temp() {
+      System.out.println("helloo lefut");
    }
    
 }
