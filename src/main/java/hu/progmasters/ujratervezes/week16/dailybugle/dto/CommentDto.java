@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class CommentDto {
-    private String commentAuthor;
+    private int readerId;
     private String commentText;
-    private LocalDateTime time;
     private int articleId;
+    private LocalDateTime createdAt;
 }

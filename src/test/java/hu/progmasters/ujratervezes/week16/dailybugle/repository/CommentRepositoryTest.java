@@ -41,7 +41,7 @@ class CommentRepositoryTest {
    
    @Test
    void saveComment() {
-      repository.saveComment(new CommentDto("Joe Doe", "comment", CREATED_AT, 1));
+      repository.saveComment(new CommentDto(1, "comment", 1, CREATED_AT));
       String sql = "SELECT * FROM comment";
       Comment comment = jdbcTemplate.queryForObject(sql, (rs, row) -> {
          Comment tempComment = new Comment();
