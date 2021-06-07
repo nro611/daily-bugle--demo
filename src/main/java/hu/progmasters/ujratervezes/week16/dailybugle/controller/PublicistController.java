@@ -24,7 +24,13 @@ public class PublicistController {
 
     @GetMapping
     public ResponseEntity<List<PublicistListDto>> getPublicists() {
-        return new ResponseEntity<>(publicistService.getPublicists(), HttpStatus.OK);
+        List<PublicistListDto> publicists = publicistService.getPublicists();
+        if (publicists != null) {
+            return new ResponseEntity<>(publicists, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")

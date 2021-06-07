@@ -29,15 +29,21 @@ public class PublicistRepository {
 
     public List<PublicistListDto> getPublicists() {
         String sql = "SELECT * from publicist WHERE status = 1";
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
-            PublicistListDto publicist = new PublicistListDto();
-            publicist.setId(resultSet.getInt("id"));
-            publicist.setName(resultSet.getString("name"));
-            publicist.setAddress(resultSet.getString("address"));
-            publicist.setEmail(resultSet.getString("email"));
-            publicist.setPhone(resultSet.getString("phone"));
-            return publicist;
-        });
+        try {
+            return jdbcTemplate.query(sql, (resultSet, i) -> {
+                PublicistListDto publicist = new PublicistListDto();
+                publicist.setId(resultSet.getInt("id"));
+                publicist.setName(resultSet.getString("name"));
+                publicist.setAddress(resultSet.getString("address"));
+                publicist.setEmail(resultSet.getString("email"));
+                publicist.setPhone(resultSet.getString("phone"));
+                return publicist;
+            });
+        }
+        catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
+            return null;
+        }
     }
 
     public Publicist getPublicist(int id) {
@@ -158,11 +164,18 @@ public class PublicistRepository {
 
     public List<PhonebookDto> getPhonebook() {
         String sql = "SELECT name, phone FROM publicist WHERE status = 1";
-        return jdbcTemplate.query(sql, (resultSet, i) -> {
-            PhonebookDto phonebook = new PhonebookDto();
-            phonebook.setName(resultSet.getString("name"));
-            phonebook.setPhone(resultSet.getString("phone"));
-            return phonebook;
-        });
+        List<PhonebookDto> phonebook = new ArrayList<>();
+        try {
+            phonebook = jdbcTemplate.query(sql, (resultSet, i) -> {
+                PhonebookDto tempPhonebook = new PhonebookDto();
+                tempPhonebook.setName(resultSet.getString("name"));
+                tempPhonebook.setPhone(resultSet.getString("phone"));
+                return tempPhonebook;
+            });
+        }
+        catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
+        }
+        return phonebook;
     }
 }

@@ -61,7 +61,15 @@ public class PublicistService {
                 .map(phonebookDto -> phonebookDto.getName() + ";" + phonebookDto.getPhone())
                 .collect(Collectors.toList());
         createDirectoryIfNotExists();
-
+    
+        if (!lines.isEmpty()) {
+            successfulWrite = writePhonebook(lines);
+        }
+        return successfulWrite;
+    }
+    
+    private boolean writePhonebook(List<String> lines) {
+        boolean successfulWrite = false;
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of("files/phonebook.csv"))) {
             for (String line : lines) {
                 writer.write(line);
@@ -73,7 +81,7 @@ public class PublicistService {
         }
         return successfulWrite;
     }
-
+    
     private void createDirectoryIfNotExists() {
         File directory = new File("files");
         if (!directory.exists()) {
