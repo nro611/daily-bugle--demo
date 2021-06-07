@@ -5,6 +5,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentWithoutIdDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j(topic = "ArticleRepository")
 public class ArticleRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -31,6 +33,7 @@ public class ArticleRepository {
         this.mapper = mapper;
     }
 
+    //TODO - add try-catch statements
     public List<ArticleListDto> getArticles() {
         return jdbcTemplate.query(ArticleQuery.GET_ALL_ARTICLE.getSqlQuery(), mapper);
     }
@@ -64,7 +67,8 @@ public class ArticleRepository {
                 article.setComments(getCommentsForArticle(id));
                 return article;
             }, id);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return null;
         }
     }
@@ -83,7 +87,8 @@ public class ArticleRepository {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_RATING.getSqlQuery(), readerId, articleId, rating, now);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -92,7 +97,8 @@ public class ArticleRepository {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.UPDATE_RATING.getSqlQuery(), rating, now, readerId, articleId);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -105,7 +111,8 @@ public class ArticleRepository {
                 rating.setRating(resultSet.getInt("article_rating"));
                 return rating;
             }, readerId, articleId);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return null;
         }
     }
@@ -121,7 +128,8 @@ public class ArticleRepository {
                     id
             );
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -130,7 +138,8 @@ public class ArticleRepository {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.DELETE_ARTICLE.getSqlQuery(), now, id);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -146,7 +155,8 @@ public class ArticleRepository {
                     data.getDeployTime()
             );
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -154,7 +164,8 @@ public class ArticleRepository {
     public List<String> getKeywords() {
         try {
             return jdbcTemplate.queryForList("SELECT keyword_name FROM keyword", String.class);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return new ArrayList<>();
         }
     }
@@ -164,7 +175,8 @@ public class ArticleRepository {
             String sql = "INSERT INTO keyword (keyword_name) VALUES (?)";
             int rowsAffected = jdbcTemplate.update(sql, keyword);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -177,8 +189,8 @@ public class ArticleRepository {
                     Integer.class,
                     keywordsInDto.toArray()
             );
-        } catch (DataAccessException e) {
-            e.printStackTrace();
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
         }
         return keywordIds;
     }
@@ -187,7 +199,8 @@ public class ArticleRepository {
         String sql = "SELECT id FROM article WHERE title = ?";
         try {
             return jdbcTemplate.queryForObject(sql, Integer.class, title);
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return 0;
         }
     }
@@ -197,7 +210,8 @@ public class ArticleRepository {
         try {
             int rowsAffected = jdbcTemplate.update(sql, articleId, keywordId);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -209,7 +223,8 @@ public class ArticleRepository {
                     String.class,
                     article_id
             );
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return new ArrayList<>();
         }
     }
@@ -218,7 +233,8 @@ public class ArticleRepository {
         try {
             int rowsAffected = jdbcTemplate.update(ArticleQuery.DELETE_KEYWORDS_ARTICLEID.getSqlQuery(), id);
             return rowsAffected == numberToBeRemoved;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -228,7 +244,8 @@ public class ArticleRepository {
         try {
             int rowsAffected = jdbcTemplate.update(sql, keyword);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -236,13 +253,13 @@ public class ArticleRepository {
     public boolean removeArticleKeywords(int articleId, String inSql, List<Integer> idsToRemove) {
         try {
             idsToRemove.add(0, articleId);
-            int rowsaffected = jdbcTemplate.update(
+            int rowsAffected = jdbcTemplate.update(
                     String.format("DELETE FROM article_keyword WHERE article_id = ? AND keyword_id IN (%s)", inSql),
                     idsToRemove.toArray()
             );
-            return rowsaffected == idsToRemove.size() - 1;
-        } catch (DataAccessException e) {
-            e.printStackTrace();
+            return rowsAffected == idsToRemove.size() - 1;
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
         }
         return false;
     }
@@ -252,7 +269,8 @@ public class ArticleRepository {
         try {
             Integer articleId = jdbcTemplate.queryForObject(sql, Integer.class, keywordId);
             return articleId != null;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }

@@ -5,6 +5,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderCommentedArticleD
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderProfileDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ReaderRatedArticleDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class ReaderRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -51,14 +53,20 @@ public class ReaderRepository {
         String sql = "SELECT r.username, r.email " +
                 "FROM reader r " +
                 "WHERE r.id = ?";
-        ReaderProfileDto readerProfile = jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
-            ReaderProfileDto reader = new ReaderProfileDto();
-            reader.setName(resultSet.getString("username"));
-            reader.setEmail(resultSet.getString("email"));
-            reader.setCommentedArticles(getCommentedArticles(id));
-            reader.setRatedArticles(getRatedArticles(id));
-            return reader;
-        }, id);
+        ReaderProfileDto readerProfile = null;
+        try {
+            readerProfile = jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+                ReaderProfileDto reader = new ReaderProfileDto();
+                reader.setName(resultSet.getString("username"));
+                reader.setEmail(resultSet.getString("email"));
+                reader.setCommentedArticles(getCommentedArticles(id));
+                reader.setRatedArticles(getRatedArticles(id));
+                return reader;
+            }, id);
+        }
+        catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
+        }
         return readerProfile;
     }
 
@@ -78,8 +86,8 @@ public class ReaderRepository {
                 readerCommentedArticle.setCommentCount(resultSet.getInt("comment_count"));
                 return readerCommentedArticle;
             }, id);
-        } catch (DataAccessException e) {
-            e.printStackTrace();
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
         }
         return commentedArticles;
     }
@@ -110,7 +118,8 @@ public class ReaderRepository {
                     now
             );
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -129,7 +138,8 @@ public class ReaderRepository {
                     id
             );
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -142,7 +152,8 @@ public class ReaderRepository {
         try {
             int rowsAffected = jdbcTemplate.update(sql, now, id);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }

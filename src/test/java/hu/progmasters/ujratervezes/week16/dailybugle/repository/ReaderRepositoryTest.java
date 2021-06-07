@@ -147,9 +147,6 @@ class ReaderRepositoryTest {
       jdbcTemplate.execute(sql);
    }
 
-   // TODO valószínűleg kellenének foreign key-k minden táblába a megfelelő tesztelhetőséghez (?),
-   // akkor viszont kell a createPublicistTable() is
-   // (többi createTable itt még a régi verzió csak a statust módosítottam)
    /*
    void createPublicistTable() {
       String sql = "CREATE TABLE publicist(" +
