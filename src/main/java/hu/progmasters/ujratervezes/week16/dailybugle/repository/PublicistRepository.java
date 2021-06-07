@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@Slf4j
+@Slf4j(topic = "PublicistRepository")
 public class PublicistRepository {
 
     private final JdbcTemplate jdbcTemplate;
