@@ -26,22 +26,46 @@ public class ArticleController {
 
     @GetMapping
     public ResponseEntity<List<ArticleListDto>> getArticles() {
-        return new ResponseEntity<>(articleService.getArticles(), HttpStatus.OK);
+        List<ArticleListDto> articles = articleService.getArticles();
+        if (articles != null) {
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/fresh")
     public ResponseEntity<List<ArticleListDto>> getFreshArticles() {
-        return new ResponseEntity<>(articleService.getFreshArticles(), HttpStatus.OK);
+        List<ArticleListDto> articles = articleService.getFreshArticles();
+        if (articles != null) {
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/top")
     public ResponseEntity<List<ArticleListDto>> getTopArticles() {
-        return new ResponseEntity<>(articleService.getTopArticles(), HttpStatus.OK);
+        List<ArticleListDto> articles = articleService.getTopArticles();
+        if (articles != null) {
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/top_fresh")
     public ResponseEntity<List<ArticleListDto>> getTopFreshArticles() {
-        return new ResponseEntity<>(articleService.getTopFreshArticles(), HttpStatus.OK);
+        List<ArticleListDto> articles = articleService.getTopFreshArticles();
+        if (articles != null) {
+            return new ResponseEntity<>(articles, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
