@@ -40,16 +40,16 @@ public class CommentRepository {
     public Comment getComment(int commentId) {
         String sql = "SELECT comment.id, reader.username, comment.comment_text, comment.article_id " +
                 "FROM comment " +
-                "JOIN reader ON comment.reader_id = reader.id" +
+                "JOIN reader ON comment.reader_id = reader.id " +
                 "WHERE comment.id=?";
         Comment comment;
         try {
             comment = jdbcTemplate.queryForObject(sql, (rs, row) -> {
                 Comment tempComment = new Comment();
-                tempComment.setId(rs.getInt("comment.id"));
-                tempComment.setCommentAuthor(rs.getString("reader.username"));
-                tempComment.setCommentText(rs.getString("comment.comment_text"));
-                tempComment.setArticleId(rs.getInt("comment.article_id"));
+                tempComment.setId(rs.getInt("id"));
+                tempComment.setCommentAuthor(rs.getString("username"));
+                tempComment.setCommentText(rs.getString("comment_text"));
+                tempComment.setArticleId(rs.getInt("article_id"));
                 return tempComment;
             }, commentId);
         } catch (DataAccessException exception) {
@@ -59,19 +59,25 @@ public class CommentRepository {
     }
     
     public List<Comment> getArticleComments(int articleId) {
+/*
         String sql = "SELECT comment.id, reader.username, comment.comment_text, comment.article_id " +
                 "FROM article " +
                 "LEFT JOIN comment ON comment.id = article.comment_id " +
-                "JOIN reader ON comment.reader_id = reader.id" +
+                "JOIN reader ON comment.reader_id = reader.id " +
                 "WHERE article.id=?";
+*/
+        String sql = "SELECT comment.id, reader.username, comment.comment_text, comment.article_id " +
+                "FROM comment " +
+                "JOIN reader ON comment.reader_id = reader.id " +
+                "WHERE comment.article_id=?";
         List<Comment> comments;
         try {
             comments = jdbcTemplate.query(sql, (rs, row) -> {
                 Comment comment = new Comment();
-                comment.setId(rs.getInt("comment.id"));
-                comment.setCommentAuthor(rs.getString("reader.username"));
-                comment.setCommentText(rs.getString("comment.comment_text"));
-                comment.setArticleId(rs.getInt("comment.article_id"));
+                comment.setId(rs.getInt("id"));
+                comment.setCommentAuthor(rs.getString("username"));
+                comment.setCommentText(rs.getString("comment_text"));
+                comment.setArticleId(rs.getInt("article_id"));
                 return comment;
             }, articleId);
         } catch (DataAccessException exception) {
