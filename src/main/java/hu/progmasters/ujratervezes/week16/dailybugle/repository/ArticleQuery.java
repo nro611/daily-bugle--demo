@@ -23,7 +23,7 @@ public enum ArticleQuery {
             "  WHERE comment.status = 1 " +
             "  GROUP BY article_id " +
             ") c ON article.id = c.article_id " +
-            "WHERE article.status = 1 " +
+            "WHERE article.status = 1 AND (article.deployed_at <= CURRENT_TIMESTAMP OR article.deployed_at IS NULL)" +
             "GROUP BY article.id;"),
     // Get article by id
     GET_ARTICLE_ID("SELECT article.id, publicist_id, title, synopsys, text, publicist.name, " +
