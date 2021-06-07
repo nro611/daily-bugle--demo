@@ -1,19 +1,20 @@
 package hu.progmasters.ujratervezes.week16.dailybugle;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
+@SpringBootApplication
 public class CreateTables {
-   
-   private  JdbcTemplate jdbcTemplate;
-   
+
+   private JdbcTemplate jdbcTemplate;
+
    @Autowired
    public CreateTables(JdbcTemplate jdbcTemplate) {
       this.jdbcTemplate = jdbcTemplate;
    }
-   
+
    public void createAllTables() {
       dropTables();
       createPublicist();
@@ -56,8 +57,8 @@ public class CreateTables {
       String sql = "CREATE TABLE IF NOT EXISTS `article` (" +
               "  `id` int NOT NULL AUTO_INCREMENT," +
               "  `publicist_id` int NOT NULL," +
-              "  `title` varchar(100) DEFAULT NULL," +
-              "  `synopsys` varchar(250) DEFAULT NULL," +
+              "  `title` varchar(200) DEFAULT NULL," +
+              "  `synopsys` varchar(500) DEFAULT NULL," +
               "  `text` varchar(1500) DEFAULT NULL," +
               "  `status` tinyint DEFAULT '1'," +
               "  `created_at` datetime DEFAULT NULL," +
