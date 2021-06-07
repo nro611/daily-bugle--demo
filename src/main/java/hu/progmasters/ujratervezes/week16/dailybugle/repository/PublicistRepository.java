@@ -116,7 +116,8 @@ public class PublicistRepository {
                 "address = ?, " +
                 "email = ?, " +
                 "phone = ?, " +
-                "modified_at = ?" +
+                "modified_at = ?, " +
+                "status = 1 " +
                 "WHERE id = ?";
         try {
             int rowsAffected = jdbcTemplate.update(sql,
