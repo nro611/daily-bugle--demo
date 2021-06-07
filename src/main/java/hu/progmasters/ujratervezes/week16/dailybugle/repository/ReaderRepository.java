@@ -39,21 +39,14 @@ public class ReaderRepository {
                 "   GROUP BY c.reader_id " +
                 "           ) AS cn ON reader_id = r.id " +
                 "WHERE r.status = 1";
-        List<Reader> readers = null;
-        try {
-            readers = jdbcTemplate.query(sql, (resultSet, i) -> {
-                Reader reader = new Reader();
-                reader.setId(resultSet.getInt("id"));
-                reader.setUserName(resultSet.getString("username"));
-                reader.setEmail(resultSet.getString("email"));
-                reader.setCommentCount(resultSet.getInt("number_of_comments"));
-                return reader;
-            });
-        }
-        catch (DataAccessException exception) {
-            logger.error(exception.getMessage());
-        }
-        return readers;
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            Reader reader = new Reader();
+            reader.setId(resultSet.getInt("id"));
+            reader.setUserName(resultSet.getString("username"));
+            reader.setEmail(resultSet.getString("email"));
+            reader.setCommentCount(resultSet.getInt("number_of_comments"));
+            return reader;
+        });
     }
 
     public ReaderProfileDto getReader(int id) {
