@@ -33,8 +33,8 @@ public class CommentRepository {
          );
          return rowsAffected == 1;
       }
-      catch (DataAccessException e) {
-         logger.error(e.getMessage());
+      catch (DataAccessException exception) {
+         logger.error(exception.getMessage());
          return false;
       }
    }
@@ -57,6 +57,7 @@ public class CommentRepository {
       }
       catch (DataAccessException exception) {
          comment = null;
+         logger.error(exception.getMessage());
       }
       return comment;
    }
@@ -86,6 +87,7 @@ public class CommentRepository {
       }
       catch (DataAccessException exception) {
          comments = null;
+         logger.error(exception.getMessage());
       }
       return comments;
    }

@@ -5,6 +5,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PhonebookDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
+@Slf4j
 public class PublicistRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -51,7 +53,8 @@ public class PublicistRepository {
                 publicist.setArticles(getArticlesByPublicist(id));
                 return publicist;
             }, id);
-        } catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException exception) {
+            logger.error(exception.getMessage());
             return null;
         }
     }
@@ -87,11 +90,10 @@ public class PublicistRepository {
                 article.setNumOfComments(resultSet.getInt("number_of_comments"));
                 return article;
             }, id);
-        } catch (DataAccessException e) {
-            e.printStackTrace();
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
         }
         return articles;
-
     }
 
     public boolean savePublicist(PublicistDto data, LocalDateTime now) {
@@ -105,7 +107,8 @@ public class PublicistRepository {
                     now
             );
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -129,7 +132,8 @@ public class PublicistRepository {
                     id
             );
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -146,7 +150,8 @@ public class PublicistRepository {
         try {
             int rowsAffected = jdbcTemplate.update(sql, now, id);
             return rowsAffected == 1;
-        } catch (DataAccessException e) {
+        } catch (DataAccessException exception) {
+            logger.error(exception.getMessage());
             return false;
         }
     }
@@ -159,6 +164,5 @@ public class PublicistRepository {
             phonebook.setPhone(resultSet.getString("phone"));
             return phonebook;
         });
-
     }
 }
