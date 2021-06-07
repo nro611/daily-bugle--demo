@@ -77,7 +77,6 @@ public class ArticleService {
         List<String> newKeywords = data.getKeywords();
         List<String> keywordsToSave = new ArrayList<>();
 
-        // TODO
         if (newKeywords == null || newKeywords.size() == 0) {
             if (removeKeywords(id, prevKeywords)) return false;
         } else {
@@ -88,7 +87,7 @@ public class ArticleService {
                     prevKeywords.remove(keyword);
                 }
             });
-            if (removeKeywords(id, prevKeywords)) return false;
+            if (!removeKeywords(id, prevKeywords)) return false;
             updateSuccessful = isKeywordSaveSuccessful(keywordsToSave, id);
         }
         return updateSuccessful;
@@ -100,7 +99,7 @@ public class ArticleService {
         if (prevKeywords != null && prevKeywords.size() > 0) {
             keywordIdsToRemove = getKeywordIds(prevKeywords);
             String inSql = String.join(",", Collections.nCopies(keywordIdsToRemove.size(), "?"));
-            if (!articleRepository.removeArticleKeywords(id, inSql, keywordIdsToRemove)) {
+            if (articleRepository.removeArticleKeywords(id, inSql, keywordIdsToRemove)) {
                 return true;
             }
             for (Integer keywordId : keywordIdsToRemove) {
