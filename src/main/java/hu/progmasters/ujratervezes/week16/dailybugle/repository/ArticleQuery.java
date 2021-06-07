@@ -11,7 +11,7 @@ public enum ArticleQuery {
             "article.title, " +
             "article.synopsys, " +
             "publicist.name, " +
-            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
+            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(3,2)),0) AS avg_rating, " +
             "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings, " +
             "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
@@ -27,7 +27,7 @@ public enum ArticleQuery {
             "GROUP BY article.id;"),
     // Get article by id
     GET_ARTICLE_ID("SELECT article.id, publicist_id, title, synopsys, text, publicist.name, " +
-            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
+            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(3,2)),0) AS avg_rating, " +
             "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings " +
             "FROM article " +
             "JOIN publicist ON publicist.id = publicist_id " +
@@ -36,7 +36,7 @@ public enum ArticleQuery {
             "GROUP BY article.id"),
     // Get the 10 latest articles
     GET_FRESH_ARTICLE("SELECT article.id, article.title, article.synopsys, publicist.name, " +
-            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
+            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(3,2)),0) AS avg_rating, " +
             "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings, " +
             "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
@@ -54,7 +54,7 @@ public enum ArticleQuery {
             "LIMIT 10"),
     // Get the 10 best rated articles
     GET_TOP_ARTICLE("SELECT article.id, article.title, article.synopsys, publicist.name, " +
-            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
+            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(3,2)),0) AS avg_rating, " +
             "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings, " +
             "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
@@ -72,7 +72,7 @@ public enum ArticleQuery {
             "LIMIT 10"),
     // Get the 10 best rated articles that are 3 days old at most
     GET_TOP_FRESH_ARTICLE("SELECT article.id, article.title, article.synopsys, publicist.name, " +
-            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(10,2)),0) AS avg_rating, " +
+            "IFNULL(CAST(AVG(rating.article_rating) AS DECIMAL(3,2)),0) AS avg_rating, " +
             "IFNULL(COUNT(rating.article_rating),0) AS number_of_ratings," +
             "IFNULL(c.CommentCount,0) AS number_of_comments " +
             "FROM article " +
