@@ -12,4 +12,4 @@ logging:
   level:
     root: "warn"
   file:
-    name: /home/a/IdeaProjects/daily-bugle--demo/files/buglereport.log
+    name: files/buglereport.log
