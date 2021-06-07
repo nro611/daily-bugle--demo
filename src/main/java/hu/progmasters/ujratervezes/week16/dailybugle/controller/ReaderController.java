@@ -24,7 +24,13 @@ public class ReaderController {
 
     @GetMapping
     public ResponseEntity<List<Reader>> getReaders() {
-        return new ResponseEntity<>(readerService.getReaders(), HttpStatus.OK);
+        List<Reader> readers = readerService.getReaders();
+        if (readers != null) {
+            return new ResponseEntity<>(readers, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
