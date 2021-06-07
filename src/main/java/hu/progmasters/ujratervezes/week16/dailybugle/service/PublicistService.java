@@ -4,6 +4,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.domain.Publicist;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.PublicistListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.PublicistRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j(topic = "PublicistService")
 public class PublicistService {
 
     private final PublicistRepository publicistRepository;
@@ -54,7 +56,7 @@ public class PublicistService {
 
 
     public boolean getPhonebook() {
-        boolean succesfulWrite = false;
+        boolean successfulWrite = false;
         List<String> lines = publicistRepository.getPhonebook().stream()
                 .map(phonebookDto -> phonebookDto.getName() + ";" + phonebookDto.getPhone())
                 .collect(Collectors.toList());
@@ -65,11 +67,11 @@ public class PublicistService {
                 writer.write(line);
                 writer.newLine();
             }
-            succesfulWrite = true;
+            successfulWrite = true;
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            logger.error(ioException.getMessage());
         }
-        return succesfulWrite;
+        return successfulWrite;
     }
 
     private void createDirectoryIfNotExists() {

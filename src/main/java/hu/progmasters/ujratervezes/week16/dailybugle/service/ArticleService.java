@@ -6,6 +6,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.ArticleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j(topic = "ArticleService")
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
@@ -201,9 +203,11 @@ public class ArticleService {
             lines = Files.readAllLines(path);
             removeBlankLines(lines);
             deployTime = LocalDateTime.parse(lines.get(0));
-        } catch (DateTimeParseException | IndexOutOfBoundsException e) {
+        } catch (DateTimeParseException | IndexOutOfBoundsException exception) {
+            logger.error(exception.getMessage());
             deployCounter = 0;
-        } catch (IOException | InvalidPathException ignored) {
+        } catch (IOException | InvalidPathException exception) {
+            logger.error(exception.getMessage());
         }
 
         if (lines.size() >= 4 + deployCounter) {
