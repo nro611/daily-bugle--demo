@@ -18,7 +18,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ReaderServiceTest {
@@ -57,6 +57,9 @@ class ReaderServiceTest {
       assertEquals("John", resultReader.getUserName());
       assertEquals("john@mail.com", resultReader.getEmail());
       assertEquals(2, resultReader.getCommentCount());
+      
+      verify(repositoryMock, times(1)).getReaders();
+      verifyNoMoreInteractions(repositoryMock);
    }
    
    @Test
