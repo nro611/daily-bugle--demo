@@ -74,7 +74,7 @@ public class PublicistController {
     }
 
     @GetMapping("/phonebook")
-    public ResponseEntity<Void> getPhonenook() {
+    public ResponseEntity<Void> getPhonebook() {
         if (publicistService.getPhonebook()) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
