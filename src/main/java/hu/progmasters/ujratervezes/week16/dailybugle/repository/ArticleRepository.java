@@ -5,6 +5,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentWithoutIdDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.service.TableDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -186,12 +187,11 @@ public class ArticleRepository {
          return false;
       }
    }
-   
+
    public List<String> getKeywords() {
       try {
          return jdbcTemplate.queryForList(ArticleQuery.GET_KEYWORDS, String.class);
-      }
-      catch (DataAccessException exception) {
+      } catch (DataAccessException exception) {
          logger.error(exception.getMessage());
          return new ArrayList<>();
       }
@@ -201,10 +201,9 @@ public class ArticleRepository {
       try {
          int rowsAffected = jdbcTemplate.update(ArticleQuery.SAVE_KEYWORD, keyword);
          return rowsAffected == 1;
-      }
-      catch (DataAccessException exception) {
+      } catch (DataAccessException exception) {
          logger.error(exception.getMessage());
-         return false;
+         throw new TableDoesNotExistException("Table not found.", exception);
       }
    }
    
@@ -239,8 +238,7 @@ public class ArticleRepository {
          return rowsAffected == 1;
       }
       catch (DataAccessException exception) {
-         logger.error(exception.getMessage());
-         return false;
+         throw new TableDoesNotExistException("Table not found.", exception);
       }
    }
    

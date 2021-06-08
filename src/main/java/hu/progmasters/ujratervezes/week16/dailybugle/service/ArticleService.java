@@ -133,7 +133,7 @@ public class ArticleService {
      *             List<String> keywords)
      * @return boolean depending if saving the article and the keywords was successful
      */
-    public boolean saveArticle(ArticleDto data) {
+    public boolean saveArticle(ArticleDto data) throws TableDoesNotExistException {
         boolean saveSuccessful = articleRepository.saveArticle(data, LocalDateTime.now(clock));
         if (saveSuccessful && data.getKeywords() != null && data.getKeywords().size() > 0) {
             saveSuccessful = isKeywordSaveSuccessful(data.getKeywords(), articleRepository.getArticleId(data.getTitle()));
@@ -141,7 +141,7 @@ public class ArticleService {
         return saveSuccessful;
     }
 
-    private boolean isKeywordSaveSuccessful(List<String> keywords, int articleId) {
+    private boolean isKeywordSaveSuccessful(List<String> keywords, int articleId) throws TableDoesNotExistException {
         boolean saveSuccessful = true;
         List<String> keywordsInDb = articleRepository.getKeywords();
         List<String> keywordsInDto = keywords

@@ -6,6 +6,8 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.service.ArticleService;
+import hu.progmasters.ujratervezes.week16.dailybugle.service.TableDoesNotExistException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/article")
 public class ArticleController {
@@ -79,8 +82,14 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> saveArticle(@RequestBody ArticleDto data) {
-        boolean saveSuccessful = articleService.saveArticle(data);
+    public ResponseEntity<String> saveArticle(@RequestBody ArticleDto data) {
+        boolean saveSuccessful;
+        try {
+            saveSuccessful = articleService.saveArticle(data);
+        } catch (TableDoesNotExistException e) {
+            logger.error(e.getMessage(), e.getCause());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         if (saveSuccessful) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
