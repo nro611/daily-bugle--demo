@@ -3,6 +3,7 @@ package hu.progmasters.ujratervezes.week16.dailybugle.service;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
+import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.ArticleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -127,10 +128,12 @@ class ArticleServiceTest {
    void saveRating_validRating_successful() {
       when(repositoryMock.getRatingWithUserAndArticle(Mockito.anyInt(), Mockito.anyInt())).thenReturn(null);
       when(repositoryMock.saveRating(anyInt(), anyInt(), anyInt(), any())).thenReturn(true);
-      
-      assertTrue(articleService.saveArticle(new ArticleDto()));
    
-      verify(repositoryMock, times(1)).saveArticle(Mockito.any(), Mockito.any());
+      ArticleRatingDto rating = new ArticleRatingDto();
+      rating.setRating(4);
+      assertTrue(articleService.saveRating(rating, 2));
+   
+      verify(repositoryMock, times(1)).saveRating(anyInt(), anyInt(), anyInt(), any());
       verifyNoMoreInteractions(repositoryMock);
    
    
