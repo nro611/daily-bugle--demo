@@ -212,7 +212,7 @@ public class ArticleRepository {
       List<Integer> keywordIds = new ArrayList<>();
       try {
          keywordIds = jdbcTemplate.queryForList(
-                 String.format("SELECT id FROM keyword WHERE keyword_name IN (%s)", inSql),
+                 String.format(ArticleQuery.GET_KEYWORD_IDS, inSql),
                  Integer.class,
                  keywordsInDto.toArray()
          );
@@ -222,7 +222,7 @@ public class ArticleRepository {
       }
       return keywordIds;
    }
-   
+
    public Integer getArticleId(String title) {
       try {
          return jdbcTemplate.queryForObject(ArticleQuery.GET_ARTICLE_ID, Integer.class, title);
@@ -284,7 +284,7 @@ public class ArticleRepository {
       try {
          idsToRemove.add(0, articleId);
          int rowsAffected = jdbcTemplate.update(
-                 String.format("DELETE FROM article_keyword WHERE article_id = ? AND keyword_id IN (%s)", inSql),
+                 String.format(ArticleQuery.REMOVE_ARTICLE_KEYWORDS, inSql),
                  idsToRemove.toArray()
          );
          return rowsAffected == idsToRemove.size() - 1;

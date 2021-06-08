@@ -127,6 +127,9 @@ public class ArticleQuery {
             "VALUES (?,?)";
     public static final String REMOVE_KEYWORD = "DELETE FROM keyword WHERE id = ?";
     public static final String CONTAINS_KEYWORD = "SELECT article_id FROM article_keyword WHERE keyword_id = ? LIMIT 1";
+    public static final String GET_KEYWORD_IDS = "SELECT id FROM keyword WHERE keyword_name IN (%s)";
+    public static final String REMOVE_ARTICLE_KEYWORDS = "DELETE FROM article_keyword WHERE article_id = ?" +
+            " AND keyword_id IN (%s)";
 
     private ArticleQuery() {
     }
