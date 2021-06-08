@@ -45,8 +45,8 @@ public class PublicistController {
 
     @PostMapping
     public ResponseEntity<Void> savePublicist(@RequestBody PublicistDto data) {
-        boolean saveSuccesful = publicistService.savePublicist(data);
-        if (saveSuccesful) {
+        boolean saveSuccessful = publicistService.savePublicist(data);
+        if (saveSuccessful) {
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
