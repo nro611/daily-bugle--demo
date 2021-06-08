@@ -4,7 +4,6 @@ import hu.progmasters.ujratervezes.week16.dailybugle.CreateTables;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Comment;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentDto;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ class CommentRepositoryTest {
    }
    
    @Test
-   void saveComment() {
+   void testSaveComment() {
       repository.saveComment(new CommentDto(4, "comment", 2, CREATED_AT));
       String sql = "SELECT comment.id, reader.username, comment.comment_text, comment.article_id " +
               "FROM comment " +
@@ -64,24 +63,24 @@ class CommentRepositoryTest {
       assertEquals("Chessmaster2000", comment.getCommentAuthor());
       assertEquals(2, comment.getArticleId());
    }
-   
+
    @Test
-   void getComment() {
+   void testGetComment() {
       Comment comment = repository.getComment(1);
       assertEquals("Ezt kipróbálom!", comment.getCommentText());
       assertEquals("albinoCat", comment.getCommentAuthor());
       assertEquals(1, comment.getArticleId());
    }
-   
+
    @Test
-   void getArticleComments() {
+   void testGetArticleComments() {
       List<Comment> comments = repository.getArticleComments(10);
       assertEquals(1, comments.size());
       Comment comment = comments.get(0);
       assertEquals("Vigyázzunk a Földre!", comment.getCommentText());
       assertEquals("Chessmaster2000", comment.getCommentAuthor());
       assertEquals(10, comment.getArticleId());
-   
+
    }
    
 }

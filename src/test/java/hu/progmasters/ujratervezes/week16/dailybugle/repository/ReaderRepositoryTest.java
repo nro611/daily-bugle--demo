@@ -46,50 +46,50 @@ class ReaderRepositoryTest {
    }
    
    @Test
-   void getReaders() {
+   void testGetReaders() {
       putReader();
       List<Reader> readerList = repository.getReaders();
-      
+
       assertEquals(1, readerList.size());
       assertEquals(1, readerList.get(0).getId());
       assertEquals("Joe", readerList.get(0).getUserName());
       assertEquals("joe@mail.com", readerList.get(0).getEmail());
    }
-   
+
    @Test
-   void getReader() {
+   void testGetReader() {
       putReader();
       ReaderProfileDto readerProfileDto = repository.getReader(1);
-      
+
       assertEquals("Joe", readerProfileDto.getName());
       assertEquals("joe@mail.com", readerProfileDto.getEmail());
       assertEquals(0, readerProfileDto.getCommentedArticles().size());
       assertEquals(0, readerProfileDto.getRatedArticles().size());
    }
-   
+
    @Test
-   void saveReader() {
+   void testSaveReader() {
       ReaderDto readerDto = new ReaderDto();
       readerDto.setUserName("Joe");
       readerDto.setEmail("joe@mail.com");
       repository.saveReader(readerDto, CREATED_AT);
       ReaderProfileDto readerProfileDto = repository.getReader(1);
-      
+
       assertEquals("Joe", readerProfileDto.getName());
       assertEquals("joe@mail.com", readerProfileDto.getEmail());
       assertEquals(0, readerProfileDto.getCommentedArticles().size());
       assertEquals(0, readerProfileDto.getRatedArticles().size());
    }
-   
+
    @Test
-   void updateReader() {
+   void testUpdateReader() {
       putReader();
       ReaderDto readerDto = new ReaderDto();
       readerDto.setUserName("Joe Doe");
       readerDto.setEmail("joe@mail.hu");
       repository.updateReader(readerDto, 1, MODIFIED_AT);
       ReaderProfileDto readerProfileDto = repository.getReader(1);
-      
+
       assertEquals("Joe Doe", readerProfileDto.getName());
       assertEquals("joe@mail.hu", readerProfileDto.getEmail());
       assertEquals(0, readerProfileDto.getCommentedArticles().size());
