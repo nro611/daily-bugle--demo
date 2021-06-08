@@ -25,11 +25,11 @@ class CommentControllerTest {
    CommentController commentController;
    
    @Mock
-   CommentService commentService;
+   CommentService commentServiceMock;
    
    @BeforeEach
    void setUp() {
-      commentController = new CommentController(commentService);
+      commentController = new CommentController(commentServiceMock);
    }
    
    @Test
@@ -39,7 +39,7 @@ class CommentControllerTest {
       MockHttpServletRequest request = new MockHttpServletRequest();
       RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
       
-      when(commentService.saveComment(Mockito.any(), Mockito.anyInt())).thenReturn(true);
+      when(commentServiceMock.saveComment(Mockito.any(), Mockito.anyInt())).thenReturn(true);
    
       ResponseEntity<Void> responseEntity = commentController.saveComment(new CommentDto(), 2);
       
@@ -54,7 +54,7 @@ class CommentControllerTest {
       MockHttpServletRequest request = new MockHttpServletRequest();
       RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
       
-      when(commentService.saveComment(Mockito.any(), Mockito.anyInt())).thenReturn(false);
+      when(commentServiceMock.saveComment(Mockito.any(), Mockito.anyInt())).thenReturn(false);
    
       ResponseEntity<Void> responseEntity = commentController.saveComment(new CommentDto(), 2);
       
