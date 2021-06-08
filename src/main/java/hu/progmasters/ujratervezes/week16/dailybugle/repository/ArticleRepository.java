@@ -9,12 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -312,23 +308,6 @@ public class ArticleRepository {
       catch (DataAccessException exception) {
          logger.error(exception.getMessage());
          return false;
-      }
-   }
-   
-   @Component
-   private static class ArticleListMapper implements RowMapper<ArticleListDto> {
-      
-      @Override
-      public ArticleListDto mapRow(ResultSet resultSet, int i) throws SQLException {
-         ArticleListDto article = new ArticleListDto();
-         article.setId(resultSet.getInt("id"));
-         article.setPublicistName(resultSet.getString("name"));
-         article.setTitle(resultSet.getString("title"));
-         article.setSynopsys(resultSet.getString("synopsys"));
-         article.setAvgRating(resultSet.getDouble("avg_rating"));
-         article.setNumOfRatings(resultSet.getInt("number_of_ratings"));
-         article.setNumOfComments(resultSet.getInt("number_of_comments"));
-         return article;
       }
    }
 }
