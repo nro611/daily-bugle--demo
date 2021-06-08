@@ -4,7 +4,10 @@ import hu.progmasters.ujratervezes.week16.dailybugle.CreateTables;
 import hu.progmasters.ujratervezes.week16.dailybugle.domain.Article;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @JdbcTest
 class ArticleRepositoryTest {
@@ -44,31 +47,31 @@ class ArticleRepositoryTest {
       createTables.dropTables();
    }
 
-   
+
    @Test
    @DisplayName("Get articles to list")
-   void getArticles() {
+   void testGetArticles() {
       List<ArticleListDto> articles = repository.getArticles();
-   
+
       assertEquals(12, articles.size());
    }
-   
+
    @Test
    @DisplayName("Get fresh articles to list")
-   void getFreshArticles() {
+   void testGetFreshArticles() {
       List<ArticleListDto> articles = repository.getFreshArticles();
-   
+
       assertEquals(10, articles.size());
-   
+
    }
-   
+
    @Test
    @DisplayName("Get top articles to list")
-   void getTopArticles() {
+   void testGetTopArticles() {
       List<ArticleListDto> articles = repository.getTopArticles();
-   
+
       assertEquals(10, articles.size());
-   
+
    }
    
 /*
@@ -84,71 +87,71 @@ class ArticleRepositoryTest {
    
    }
 */
-   
+
    @Test
    @DisplayName("Get article by ID")
-   void getArticle() {
+   void testGetArticle() {
       Article article = repository.getArticle(1);
-      
+
       assertEquals("Legjobb fogyasztóteák", article.getTitle());
       assertEquals(1, article.getPublicistId());
       assertEquals("Kovács Aladár", article.getPublicistName());
-      
+
    }
-   
+
    @Test
    @DisplayName("Update article by ID")
-   void updateArticle() {
+   void testUpdateArticle() {
       ArticleDto articleDto = new ArticleDto();
       articleDto.setTitle("title");
       repository.updateArticle(articleDto, 1, CREATED_AT);
       Article article = repository.getArticle(1);
-      
+
       assertEquals("title", article.getTitle());
-   
+
    }
-   
+
    @Test
-   void saveArticle() {
+   void testSaveArticle() {
    }
-   
+
    @Test
-   void getKeywords() {
+   void testGetKeywords() {
    }
-   
+
    @Test
-   void saveKeyword() {
+   void testSaveKeyword() {
    }
-   
+
    @Test
-   void getKeywordIds() {
+   void testGetKeywordIds() {
    }
-   
+
    @Test
-   void getArticleId() {
+   void testGetArticleId() {
    }
-   
+
    @Test
-   void saveArticleKeyword() {
+   void testSaveArticleKeyword() {
    }
-   
+
    @Test
-   void getKeywordsForArticle() {
+   void testGetKeywordsForArticle() {
    }
-   
+
    @Test
-   void removeKeywords() {
+   void testRemoveKeywords() {
    }
-   
+
    @Test
-   void removeKeyword() {
+   void testRemoveKeyword() {
    }
-   
+
    @Test
-   void removeArticleKeywords() {
+   void testRemoveArticleKeywords() {
    }
-   
+
    @Test
-   void containsKeyword() {
+   void testContainsKeyword() {
    }
 }

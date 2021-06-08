@@ -53,76 +53,76 @@ class PublicistRepositoryTest {
    }
    
    @Test
-   void getPublicists() {
+   void testGetPublicists() {
       putPublicist();
       List<PublicistListDto> publicistList = repository.getPublicists();
-   
+
       Assertions.assertEquals(1, publicistList.size());
       Assertions.assertEquals("Joe", publicistList.get(0).getName());
       Assertions.assertEquals("Budapest", publicistList.get(0).getAddress());
       Assertions.assertEquals("joe@mail.com", publicistList.get(0).getEmail());
       Assertions.assertEquals("phone", publicistList.get(0).getPhone());
    }
-   
+
    @Test
-   void getPublicist() {
+   void testGetPublicist() {
       putPublicist();
       Publicist publicist = repository.getPublicist(1);
-      
+
       assertEquals(1, publicist.getId());
       assertEquals("Joe", publicist.getName());
       assertEquals("Budapest", publicist.getAddress());
       assertEquals("joe@mail.com", publicist.getEmail());
       assertEquals("phone", publicist.getPhone());
    }
-   
+
    @Test
-   void savePublicist() {
+   void testSavePublicist() {
       repository.savePublicist(getPublicistDto(), CREATED_AT);
       Publicist publicist = repository.getPublicist(1);
-   
+
       assertEquals(1, publicist.getId());
       assertEquals("Joe", publicist.getName());
       assertEquals("Budapest", publicist.getAddress());
       assertEquals("joe@mail.com", publicist.getEmail());
       assertEquals("phone", publicist.getPhone());
    }
-   
+
    @Test
-   void updatePublicist() {
+   void testUpdatePublicist() {
       putPublicist();
       repository.updatePublicist(1, getUpdatedPublicistDto(), MODIFIED_AT);
       Publicist publicist = repository.getPublicist(1);
-   
+
       assertEquals(1, publicist.getId());
       assertEquals("Joe Doe", publicist.getName());
       assertEquals("London", publicist.getAddress());
       assertEquals("joe@mail.com", publicist.getEmail());
       assertEquals("phone doe", publicist.getPhone());
    }
-   
+
    @Test
-   void deletePublicist() {
+   void testDeletePublicist() {
       putPublicist();
       repository.deletePublicist(1, MODIFIED_AT);
       Publicist publicist = getDeletedPublicist(1);
-      
+
       assertEquals(1, publicist.getId());
       assertEquals("Névtelen Szerző", publicist.getName());
       assertNull(publicist.getAddress());
       assertNull(publicist.getEmail());
       assertNull(publicist.getPhone());
    }
-   
+
    @Test
-   void getPhonebook() {
+   void testGetPhonebook() {
       putPublicist();
       List<PhonebookDto> phoneBook = repository.getPhonebook();
-   
+
       assertEquals(1, phoneBook.size());
       assertEquals("Joe", phoneBook.get(0).getName());
       assertEquals("phone", phoneBook.get(0).getPhone());
-   
+
    }
    
    void putPublicist() {
