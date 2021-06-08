@@ -5,7 +5,6 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.CommentWithoutIdDto;
-import hu.progmasters.ujratervezes.week16.dailybugle.service.TableDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

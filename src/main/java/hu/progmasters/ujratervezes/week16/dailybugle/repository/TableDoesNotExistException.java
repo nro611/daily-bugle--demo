@@ -1,4 +1,4 @@
-package hu.progmasters.ujratervezes.week16.dailybugle.service;
+package hu.progmasters.ujratervezes.week16.dailybugle.repository;
 
 public class TableDoesNotExistException extends RuntimeException {
 

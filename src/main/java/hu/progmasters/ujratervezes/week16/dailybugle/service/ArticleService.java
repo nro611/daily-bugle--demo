@@ -6,6 +6,7 @@ import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleImportPathDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleListDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.dto.ArticleRatingDto;
 import hu.progmasters.ujratervezes.week16.dailybugle.repository.ArticleRepository;
+import hu.progmasters.ujratervezes.week16.dailybugle.repository.TableDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
