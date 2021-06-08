@@ -81,6 +81,5 @@ public class PublicistController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
-
+    
 }
