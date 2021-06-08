@@ -28,9 +28,8 @@ public class PublicistRepository {
     }
 
     public List<PublicistListDto> getPublicists() {
-        String sql = "SELECT * from publicist WHERE status = 1";
         try {
-            return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return jdbcTemplate.query(PublicistQuery.GET_PUBLICISTS, (resultSet, i) -> {
                 PublicistListDto publicist = new PublicistListDto();
                 publicist.setId(resultSet.getInt("id"));
                 publicist.setName(resultSet.getString("name"));
@@ -47,9 +46,8 @@ public class PublicistRepository {
     }
 
     public Publicist getPublicist(int id) {
-        String sql = "SELECT * FROM publicist WHERE id = ? AND status = 1";
         try {
-            return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+            return jdbcTemplate.queryForObject(PublicistQuery.GET_PUBLICIST, (resultSet, i) -> {
                 Publicist publicist = new Publicist();
                 publicist.setId(resultSet.getInt("id"));
                 publicist.setName(resultSet.getString("name"));
@@ -68,24 +66,8 @@ public class PublicistRepository {
     // gets all articles by a publicist in a descending order, used in getPublicist for articleList
     private List<ArticleListDto> getArticlesByPublicist(int id) {
         List<ArticleListDto> articles = new ArrayList<>();
-        String sql = "SELECT a.id, p.name, a.title, a.synopsys, " +
-                "IFNULL(CAST(AVG(r.article_rating) AS DECIMAL(10,2)),0.00) AS avg_rating," +
-                "IFNULL(COUNT(r.article_rating),0) AS number_of_ratings, " +
-                "IFNULL(c.CommentCount,0) AS number_of_comments " +
-                "FROM article a " +
-                "JOIN publicist p ON p.id = a.publicist_id " +
-                "LEFT JOIN (" +
-                "  SELECT comment.article_id, COUNT(*) as CommentCount " +
-                "  FROM comment " +
-                "  WHERE comment.status = 1 " +
-                "  GROUP BY article_id " +
-                ") c ON a.id = c.article_id " +
-                "LEFT JOIN rating r ON r.article_id = a.id " +
-                "WHERE p.id = ? AND a.status = 1 AND (a.deployed_at <= CURRENT_TIMESTAMP OR a.deployed_at IS NULL)" +
-                "GROUP BY a.id " +
-                "ORDER BY a.created_at DESC;";
         try {
-            articles = jdbcTemplate.query(sql, (resultSet, i) -> {
+            articles = jdbcTemplate.query(PublicistQuery.GET_ARTICLES_BY_PUBLICIST, (resultSet, i) -> {
                 ArticleListDto article = new ArticleListDto();
                 article.setId(resultSet.getInt("id"));
                 article.setPublicistName(resultSet.getString("name"));
@@ -103,9 +85,8 @@ public class PublicistRepository {
     }
 
     public boolean savePublicist(PublicistDto data, LocalDateTime now) {
-        String sql = "INSERT INTO publicist (name, address, email, phone, created_at) VALUES (?, ?, ?, ?, ?);";
         try {
-            int rowsAffected = jdbcTemplate.update(sql,
+            int rowsAffected = jdbcTemplate.update(PublicistQuery.SAVE_PUBLICIST,
                     data.getName(),
                     data.getAddress(),
                     data.getEmail(),
@@ -120,16 +101,8 @@ public class PublicistRepository {
     }
 
     public boolean updatePublicist(int id, PublicistDto data, LocalDateTime now) {
-        String sql = "UPDATE publicist SET " +
-                "name = ?, " +
-                "address = ?, " +
-                "email = ?, " +
-                "phone = ?, " +
-                "modified_at = ?, " +
-                "status = 1 " +
-                "WHERE id = ?";
         try {
-            int rowsAffected = jdbcTemplate.update(sql,
+            int rowsAffected = jdbcTemplate.update(PublicistQuery.UPDATE_PUBLICIST,
                     data.getName(),
                     data.getAddress(),
                     data.getEmail(),
@@ -145,16 +118,8 @@ public class PublicistRepository {
     }
 
     public boolean deletePublicist(int id, LocalDateTime now) {
-        String sql = "UPDATE publicist SET " +
-                "name = 'Névtelen Szerző', " +
-                "address = NULL, " +
-                "email = NULL, " +
-                "phone = NULL, " +
-                "status = 0, " +
-                "modified_at = ? " +
-                "WHERE id = ?";
         try {
-            int rowsAffected = jdbcTemplate.update(sql, now, id);
+            int rowsAffected = jdbcTemplate.update(PublicistQuery.DELETE_PUBLICIST, now, id);
             return rowsAffected == 1;
         } catch (DataAccessException exception) {
             logger.error(exception.getMessage());
@@ -163,10 +128,9 @@ public class PublicistRepository {
     }
 
     public List<PhonebookDto> getPhonebook() {
-        String sql = "SELECT name, phone FROM publicist WHERE status = 1";
         List<PhonebookDto> phonebook = new ArrayList<>();
         try {
-            phonebook = jdbcTemplate.query(sql, (resultSet, i) -> {
+            phonebook = jdbcTemplate.query(PublicistQuery.GET_PHONEBOOK, (resultSet, i) -> {
                 PhonebookDto tempPhonebook = new PhonebookDto();
                 tempPhonebook.setName(resultSet.getString("name"));
                 tempPhonebook.setPhone(resultSet.getString("phone"));
