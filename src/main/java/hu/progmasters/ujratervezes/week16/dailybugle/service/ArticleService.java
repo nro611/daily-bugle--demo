@@ -244,16 +244,17 @@ public class ArticleService {
     }
 
     public boolean saveRating(ArticleRatingDto data, int articleId) {
+        boolean isSuccessful = false;
         int rating = data.getRating();
         if (rating >= 1 && rating <= 5) {
             if (articleRepository.getRatingWithUserAndArticle(data.getReaderId(), articleId) != null) {
-                return articleRepository.updateRating(data.getReaderId(), articleId, rating, LocalDateTime.now(clock));
+                isSuccessful = articleRepository.updateRating(data.getReaderId(), articleId, rating, LocalDateTime.now(clock));
             } else {
-                return articleRepository.saveRating(data.getReaderId(), articleId, rating, LocalDateTime.now(clock));
+                isSuccessful = articleRepository.saveRating(data.getReaderId(), articleId, rating, LocalDateTime.now(clock));
             }
-        } else {
-            return false;
         }
+        return isSuccessful;
+
     }
 
     public boolean deleteArticle(int id) {
