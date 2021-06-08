@@ -124,20 +124,24 @@ public class ArticleRepository {
          return false;
       }
    }
-   
+
    public ArticleRatingDto getRatingWithUserAndArticle(int readerId, int articleId) {
+      ArticleRatingDto articleDto = null;
       try {
-         return jdbcTemplate.queryForObject(ArticleQuery.GET_RATING_USER_ARTICLE, (resultSet, i) -> {
+         List<ArticleRatingDto> articleRatingDtos = jdbcTemplate.query(ArticleQuery.GET_RATING_USER_ARTICLE, (resultSet, i) -> {
             ArticleRatingDto rating = new ArticleRatingDto();
             rating.setReaderId(resultSet.getInt("reader_id"));
             rating.setRating(resultSet.getInt("article_rating"));
             return rating;
          }, readerId, articleId);
+         if (!articleRatingDtos.isEmpty()) {
+            articleDto = articleRatingDtos.get(0);
+         }
       }
       catch (DataAccessException exception) {
          logger.error(exception.getMessage());
-         return null;
       }
+      return articleDto;
    }
    
    public boolean updateArticle(ArticleDto data, int id, LocalDateTime now) {
