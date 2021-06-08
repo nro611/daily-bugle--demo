@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 @Slf4j(topic = "CommentRepository")
 public class CommentRepository {
-   
+
    private final JdbcTemplate jdbcTemplate;
    
    @Autowired
@@ -22,10 +22,8 @@ public class CommentRepository {
    }
    
    public boolean saveComment(CommentDto data) {
-      String sql = "INSERT INTO comment (reader_id, comment_text, article_id, created_at) " +
-              "VALUES (?, ?, ?, ?)";
       try {
-         int rowsAffected = jdbcTemplate.update(sql,
+         int rowsAffected = jdbcTemplate.update(CommentQuery.SAVE_COMMENT,
                  data.getReaderId(),
                  data.getCommentText(),
                  data.getArticleId(),
@@ -40,13 +38,9 @@ public class CommentRepository {
    }
    
    public Comment getComment(int commentId) {
-      String sql = "SELECT comment.id, reader.username, comment.comment_text, comment.article_id " +
-              "FROM comment " +
-              "JOIN reader ON comment.reader_id = reader.id " +
-              "WHERE comment.id=?";
       Comment comment;
       try {
-         comment = jdbcTemplate.queryForObject(sql, (rs, row) -> {
+         comment = jdbcTemplate.queryForObject(CommentQuery.GET_COMMENT, (rs, row) -> {
             Comment tempComment = new Comment();
             tempComment.setId(rs.getInt("id"));
             tempComment.setCommentAuthor(rs.getString("username"));
@@ -70,13 +64,9 @@ public class CommentRepository {
                 "JOIN reader ON comment.reader_id = reader.id " +
                 "WHERE article.id=?";
 */
-      String sql = "SELECT comment.id, reader.username, comment.comment_text, comment.article_id " +
-              "FROM comment " +
-              "JOIN reader ON comment.reader_id = reader.id " +
-              "WHERE comment.article_id=?";
       List<Comment> comments;
       try {
-         comments = jdbcTemplate.query(sql, (rs, row) -> {
+         comments = jdbcTemplate.query(CommentQuery.GET_ARTICLE_COMMENTS, (rs, row) -> {
             Comment comment = new Comment();
             comment.setId(rs.getInt("id"));
             comment.setCommentAuthor(rs.getString("username"));
