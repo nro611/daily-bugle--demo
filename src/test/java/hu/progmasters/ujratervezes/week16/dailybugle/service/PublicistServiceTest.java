@@ -15,9 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Clock;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class PublicistServiceTest {
@@ -33,19 +33,19 @@ class PublicistServiceTest {
    void setUp() {
       publicistService = new PublicistService(repositoryMock, clock);
    }
-   
+
    @Test
    @DisplayName("Get all publicist in list")
-   void getPublicists() {
+   void TestGetPublicists() {
       PublicistListDto publicistDto = new PublicistListDto();
       publicistDto.setName("John");
       publicistDto.setEmail("john@mail.com");
       publicistDto.setPhone("phone");
       publicistDto.setAddress("address");
       publicistDto.setId(2);
-      
+
       when(repositoryMock.getPublicists()).thenReturn(List.of(publicistDto));
-      
+
       List<PublicistListDto> publicists = publicistService.getPublicists();
       PublicistListDto publicist = publicists.get(0);
       
@@ -60,29 +60,29 @@ class PublicistServiceTest {
       verifyNoMoreInteractions(repositoryMock);
    
    }
-   
+
    @Test
    @DisplayName("Save publicist successful")
-   void savePublicist() {
+   void TestSavePublicist() {
       when(repositoryMock.savePublicist(Mockito.any(), Mockito.any())).thenReturn(true);
-      
+
       assertTrue(publicistService.savePublicist(new PublicistDto()));
-      
+
       verify(repositoryMock, times(1)).savePublicist(Mockito.any(), Mockito.any());
       verifyNoMoreInteractions(repositoryMock);
    }
-   
+
    @Test
    @DisplayName("Get publicist by ID")
-   void getPublicist() {
+   void TestGetPublicist() {
       Publicist publicist = new Publicist();
       publicist.setId(2);
       publicist.setName("John");
       publicist.setEmail("john@mail.com");
       publicist.setPhone("phone");
-      
+
       when(repositoryMock.getPublicist(Mockito.anyInt())).thenReturn(publicist);
-      
+
       Publicist resultPublicist = publicistService.getPublicist(2);
       
       assertEquals(2, resultPublicist.getId());
@@ -94,29 +94,29 @@ class PublicistServiceTest {
       verifyNoMoreInteractions(repositoryMock);
    
    }
-   
+
    @Test
    @DisplayName("Update publicist successful")
-   void updatePublicist() {
+   void TestUpdatePublicist() {
       when(repositoryMock.updatePublicist(Mockito.anyInt(), Mockito.any(), Mockito.any())).thenReturn(true);
-      
+
       assertTrue(publicistService.updatePublicist(1, new PublicistDto()));
-   
+
       verify(repositoryMock, times(1)).updatePublicist(Mockito.anyInt(), Mockito.any(), Mockito.any());
       verifyNoMoreInteractions(repositoryMock);
-   
+
    }
-   
+
    @Test
    @DisplayName("Delete publicist successful")
-   void deletePublicist() {
+   void TestDeletePublicist() {
       when(repositoryMock.deletePublicist(Mockito.anyInt(), Mockito.any())).thenReturn(true);
-      
+
       assertTrue(publicistService.deletePublicist(1));
-   
+
       verify(repositoryMock, times(1)).deletePublicist(Mockito.anyInt(), Mockito.any());
       verifyNoMoreInteractions(repositoryMock);
-   
+
    }
    
 }
