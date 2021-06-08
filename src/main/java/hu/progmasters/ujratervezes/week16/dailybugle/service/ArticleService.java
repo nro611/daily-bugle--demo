@@ -255,7 +255,6 @@ public class ArticleService {
             }
         }
         return isSuccessful;
-
     }
 
     public boolean deleteArticle(int id) {
