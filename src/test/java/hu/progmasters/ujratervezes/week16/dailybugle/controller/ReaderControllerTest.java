@@ -39,9 +39,6 @@ class ReaderControllerTest {
    @DisplayName("Get readers successful status OK")
    void getReaders_successful() {
    
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-   
       when(readerServiceMock.getReaders()).thenReturn(List.of(new Reader()));
    
       ResponseEntity<List<Reader>> responseEntity = readerController.getReaders();
@@ -54,9 +51,6 @@ class ReaderControllerTest {
    @DisplayName("Get reader by ID status OK")
    void getReader_successful() {
       
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-   
       when(readerServiceMock.getReader(Mockito.anyInt())).thenReturn(new ReaderProfileDto());
    
       ResponseEntity<ReaderProfileDto> responseEntity = readerController.getReader(3);
@@ -70,9 +64,6 @@ class ReaderControllerTest {
    @DisplayName("Save reader successful status created")
    void saveReader_successful_created() {
       
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-   
       when(readerServiceMock.saveReader(Mockito.any())).thenReturn(true);
    
       ResponseEntity<Void> responseEntity = readerController.saveReader(new ReaderDto());
@@ -85,9 +76,6 @@ class ReaderControllerTest {
    @DisplayName("Update reader successful status OK")
    void updateReader_successful() {
    
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-   
       when(readerServiceMock.updateReader(Mockito.any(), Mockito.anyInt())).thenReturn(true);
    
       ResponseEntity<Void> responseEntity = readerController.updateReader(new ReaderDto(), 2);
@@ -99,9 +87,6 @@ class ReaderControllerTest {
    @Test
    @DisplayName("Delete reader successful status OK")
    void deleteReader_successful() {
-   
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
    
       when(readerServiceMock.deleteReader(Mockito.anyInt())).thenReturn(true);
    

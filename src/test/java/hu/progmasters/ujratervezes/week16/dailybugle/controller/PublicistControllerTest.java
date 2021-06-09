@@ -40,9 +40,6 @@ class PublicistControllerTest {
    @DisplayName("Get publicist successful status OK")
    void getPublicists_successful() {
    
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-   
       when(publicistServiceMock.getPublicists()).thenReturn(List.of(new PublicistListDto()));
    
       ResponseEntity<List<PublicistListDto>> responseEntity = publicistController.getPublicists();
@@ -54,9 +51,6 @@ class PublicistControllerTest {
    @Test
    @DisplayName("Get publicist by ID status OK")
    void getPublicist_successful() {
-   
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
    
       when(publicistServiceMock.getPublicist(Mockito.anyInt())).thenReturn(new Publicist());
    
@@ -70,9 +64,6 @@ class PublicistControllerTest {
    @DisplayName("Save publicist successful status created")
    void savePublicist_successful() {
    
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-   
       when(publicistServiceMock.savePublicist(Mockito.any())).thenReturn(true);
    
       ResponseEntity<Void> responseEntity = publicistController.savePublicist(new PublicistDto());
@@ -85,9 +76,6 @@ class PublicistControllerTest {
    @DisplayName("Update publicist successful status OK")
    void updatePublicist_successful() {
    
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-   
       when(publicistServiceMock.updatePublicist(Mockito.anyInt(), Mockito.any())).thenReturn(true);
    
       ResponseEntity<Void> responseEntity = publicistController.updatePublicist(2, new PublicistDto());
@@ -99,8 +87,6 @@ class PublicistControllerTest {
    @Test
    @DisplayName("Delete publicist successful status OK")
    void deletePublicist_successful() {
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
    
       when(publicistServiceMock.deletePublicist(Mockito.anyInt())).thenReturn(true);
    
@@ -112,8 +98,6 @@ class PublicistControllerTest {
    
    @Test
    void getPhonebook() {
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
    
       when(publicistServiceMock.getPhonebook()).thenReturn(true);
    

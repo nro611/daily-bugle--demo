@@ -36,9 +36,6 @@ class CommentControllerTest {
    @DisplayName("Successful save comment get created")
    void saveComment_successful_created() {
       
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-      
       when(commentServiceMock.saveComment(Mockito.any(), Mockito.anyInt())).thenReturn(true);
    
       ResponseEntity<Void> responseEntity = commentController.saveComment(new CommentDto(), 2);
@@ -50,9 +47,6 @@ class CommentControllerTest {
    @Test
    @DisplayName("Fail save comment get bad request")
    void saveComment_fail_badRequest() {
-      
-      MockHttpServletRequest request = new MockHttpServletRequest();
-      RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
       
       when(commentServiceMock.saveComment(Mockito.any(), Mockito.anyInt())).thenReturn(false);
    
